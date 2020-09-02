@@ -531,7 +531,7 @@ mysql> desc books;
 
  ```
 
- si se requiere ver el comentario que quedo en laguage se puede utilizar **show full columns rom books**
+ si se requiere ver el comentario que quedo en language anteriormente se puede utilizar la sentencia **show full columns rom books**
 
  ```
 mysql> show full columns from books;
@@ -552,6 +552,26 @@ mysql> show full columns from books;
 10 rows in set (0.03 sec)
 
  ```
- la palabra **year** es una palabra reservada del lenguaje al igual que **language**, para que el lenguaje diferencie que es una palabra no reservada de su mismo lenguaje, se pueden colocar comillas sencillas invertidas entre ellas es decir **`year`**, **`language`**, **`description`**  y **`name`**. 
+ la palabra **year** es una palabra reservada del lenguaje al igual que **language**, para que el lenguaje diferencie que es una palabra no reservada de su mismo lenguaje, se pueden colocar comillas sencillas invertidas entre ellas es decir 
+ ```
+CREATE TABLE IF NOT EXISTS books (
+    book_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
+    author_id INTEGER UNSIGNED,
+    title VARCHAR(100) NOT NULL,
+    `year` INTEGER UNSIGNED NOT NULL DEFAULT 1900,
+    `language` VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language',
+    cover_url VARCHAR(500),
+    price DOUBLE(6,2) NOT NULL DEFAULT 10.0,
+    sellable TINYINT(1) DEFAULT 1,
+    copies INTEGER NOT NULL DEFAULT 1,
+    `description` TEXT
+);
+
+CREATE TABLE IF NOT EXISTS authors(
+    author_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    nationality VARCHAR(3)
+);
+ ```
 
  lo que se puede hacer es borrar la tabla hacer la correccion en estos valores y nuevamente crearlas repitiendo los pasos
