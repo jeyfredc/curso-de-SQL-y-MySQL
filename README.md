@@ -4,8 +4,11 @@
 **Contenido**
 
 [Clase 1 Bienvenida al curso](#Clase-1-Bienvenida-al-curso)
+
 [Clase 2 Instalacion de MySQL](#Clase-2-Instalacion-de-MySQL)
+
 [Clase 3 La Consola de MySQL](#Clase-3-La-Consola-de-MySQL)
+
 []()
 []()
 []()
