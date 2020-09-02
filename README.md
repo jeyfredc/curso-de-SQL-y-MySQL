@@ -5,39 +5,62 @@
 
 [Clase 1 Bienvenida al curso](#Clase-1-Bienvenida-al-curso)
 
-[Clase 2 Instalacion de MySQL](#Clase-2-Instalacion-de-MySQL)
+[Clase 2 Instalación de MySQL](#Clase-2-Instalación-de-MySQL)
 
 [Clase 3 La Consola de MySQL](#Clase-3-La-Consola-de-MySQL)
 
+[Clase 4 ¿Qué es una base de datos?](#Clase-4-¿Qué-es-una-base-de-datos?)
+
+[Clase 5 Comando CREATE](#Clase-5-Comando-CREATE)
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
+
 []()
-[]()
-[]()
+
 
 ## Clase 1 Bienvenida al curso
 
-El curso se basara sobre un proyecto directamente con la base de datos, se tratara de una libreria donde se pueda comprar o rentar un libro y se ira creando paso a paso, es importante investigar con la documentacion que ofrecen los programas SQL y MySQL. No es un proyecto de programacion y se va a realizar el curso desde la consola
+El curso se basara sobre un proyecto directamente con la base de datos, se tratara de una librería donde se pueda comprar o rentar un libro y se ira creando paso a paso, es importante investigar con la documentación que ofrecen los programas SQL y MySQL. No es un proyecto de programación y se va a realizar el curso desde la consola
 
-## Clase 2 Instalacion de MySQL
+## Clase 2 Instalación de MySQL
 
 Para realizar la instalación de MySQL en tu pc lo primero que debes tener en cuenta es que debes hacer la verificación de la versión que quieres instalar y la distribución para tu sistema operativo. En este enlace encuentras el listado de las plataformas soportadas. https://www.mysql.com/support/supportedplatforms/database.html
 
@@ -47,7 +70,7 @@ Si estas trabajando con Windows puedes hacer la descarga ingresando en el siguie
 
 El instalador para Windows es muy similar a los que ya conocemos, nos pide algunas verificaciones y nos permite navegar a través de diferentes ventanas.
 
-Inicialmente el instalador nos va a solicitar que aceptemos la los términos y acuerdos de la licencia. Revisalos y si estas de acuerdo continua.
+Inicialmente el instalador nos va a solicitar que aceptemos los términos y acuerdos de la licencia. Revisalos y si estas de acuerdo continua.
 
 En seguida te va a solicitar información relacionada con el tipo de instalación que vas a realizar, puedes elegir entre Developer Default, Client Only y Full. Cualquiera que sea la opción que elijas esto no implica que luego puedas actualizarla.
 
@@ -119,7 +142,7 @@ la siguiente sentencia que se debe ejecutar en mysql es la siguiente, y donde di
 mysql>ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 ```
 
-despues de presionar la tecla ENTER saldra una sentencia parecida a esta
+después de presionar la tecla ENTER saldrá una sentencia parecida a esta
 
 ```
 Query OK, 0 rows affected (0.25 sec)
@@ -131,16 +154,16 @@ si no aparece se puede ejecutar el comando
 mysql> FLUSH PRIVILEGES;
 ```
 
-despues nuevamente colocar la sentencia
+después nuevamente colocar la sentencia
 
 ```
 SELECT user,authentication_string,plugin,host FROM mysql.user;
 ```
-En esta va aparecer nuevamente el cuadro pero ya van aparecer los campos de  authentication_string y plugin diferentes
+En esta va aparecer nuevamente el cuadro pero ya van aparecer los campos de authentication_string y plugin diferentes
 
 ![assets/3.png](assets/3.png)
 
-despues de esto podemos salir de mysql mediante la sentencia 
+después de esto podemos salir de mysql mediante la sentencia 
 
 ```
 mysql>exit
@@ -154,7 +177,7 @@ mysql -u root -h localhost -p
 
 solicita el ingreso del password y ya en este caso se coloca el que se haya asignado en los pasos anteriores y ya queda configurado para continuar con las clases del curso.
 
-Mas adelante la recomendacion es que todas las sentencias que se colocan en mysql a exepcion de 2 finalizan con un **;**
+Mas adelante la recomendación es que todas las sentencias que se colocan en mysql a exepcion de 2 finalizan con un **;**
 
 Mediante la sentencia
 
@@ -195,3 +218,25 @@ y ya para salir de mysql con la sentencia
 ```
 mysql>exit;
 ```
+
+## Clase 4 ¿Qué es una base de datos?
+
+Existen de diferentes sabores, colores, pero una base de datos es un lugar donde se pueden almacenar datos puntuales de cualquier cantidad de cosas, para después operar sobre esos datos y convertirlos en información y estos a su vez convertilos en operaciones de negocios, en crecimiento, dinero, sabiduría, etc..., antes que todo lo anterior en el diseño de un modelo relacional que es crear tablas donde algunas pueden depender entre si, no necesariamente entre todas. Lo importante es saber que se pueden crear relaciones por ejemplo como las de un libro, un libro puede contener diferentes autores o viceversa un autor puede contener muchos libros.
+
+Una base de datos permite almacenar datos y relaciones que se pueden convertir en información. 
+
+## Clase 5 Comando CREATE
+
+Lo primero que se va a realizar es crear las diferentes tablas que se requieren para iniciar con el proyecto con base al diagrama se ira creando la tabla y cada columna se ira creando de un tipo de dato diferente donde se usaran los mas prácticos o comunes.
+
+En general existen diferentes tipos de tablas, pero se va a hablar de los 2 principales tablas **InnoDB** y **MyISAM** que provee MySQL por defecto
+
+**InnoDB**
+
+Es una base de datos mas nueva, robusta y recuperable en caso de que exista un fallo en el disco duro pero es mas lenta
+
+**MyISAM**
+
+Es una tabla directa, sencilla y rapida. Las operaciones y transacciones son 1 a 1 por tal razon la velocidad de lectura y escritura es mayor.
+
+Esto afecta la estrategia, existen 2 tipos de tablas o arquitectura que se van a usar que es una **tabla de catalogo** y una **tabla de operacion**, la diferencia es que la tabla de catalogo crecerá en un orden lento por tal razón se utilizara **InnoDb**, las tablas que crecen y se utilizan mucho acceso al disco duro sera en **MyISAM** para darle mayor agilidad al sistema
