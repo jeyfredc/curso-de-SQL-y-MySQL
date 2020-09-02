@@ -15,7 +15,7 @@
 
 [Clase 6 Tipos de columnas / Creación de la tabla books](#Clase-6-Tipos-de-columnas-/-Creación-de-la-tabla-books)
 
-[]()
+[Clase 7 Tipos de columnas / Creación de la tabla authors](#Clase-7-Tipos-de-columnas-/-Creación-de-la-tabla-authors)
 
 []()
 
@@ -314,12 +314,12 @@ para empezar a crear la tabla se puede coger un documento vacio y especificar la
 **Creacion de la libreria**
 ```
 CREATE TABLE IF NOT EXISTS books (
-    book_id INTEGER UNSIGNED PRIMARY AUTO_INCREMENT, 
-    author ,
+    book_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
+    author_id INTEGER UNSIGNED,
     title VARCHAR(100) NOT NULL,
     year INTEGER UNSIGNED NOT NULL DEFAULT 1900,
     language VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language',
-    cover url VARCHAR(500),
+    cover_url VARCHAR(500),
     price DOUBLE(6,2) NOT NULL DEFAULT 10.0,
     sellable TINYINT(1) DEFAULT 1,
     copies INTEGER NOT NULL DEFAULT 1,
@@ -328,9 +328,13 @@ CREATE TABLE IF NOT EXISTS books (
 ```
 - Es una buena practica que cada tabla se llame en el plural del sustantivo que se va a guardar y es una practica o convención muy usada que le permite a otras personas identificar como se esta trabajando
 
+- MySQL permite mayusculas y minusculas tanto en columnas y filas. 
+
+- Es buena practica que todos los nombres de columnas y tablas vayan en minusculas y todas las palabras reservadas del lenguaje vayan en mayusculas
+
 - **IF NOT EXISTS** es una sentencia para evitar crear posiblemente una tabla con el mismo nombre
 
-- Toda tabla necesita un Id que lo que hace es poder ubicar a una tupla de una manera única y para eso se debe usar un entero **(book_id INTEGER UNSIGNED PRIMARY AUTO_INCREMENT)** que sera auto incremental como lo indica la sentencia **AUTO_INCREMENT**, el primer tipo de datos usado en las tablas es el entero **INTEGER** y como característica tiene que es un **PRIMARY**.
+- Toda tabla necesita un Id que lo que hace es poder ubicar a una tupla de una manera única y para eso se debe usar un entero **(book_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT)** que sera auto incremental como lo indica la sentencia **AUTO_INCREMENT**, el primer tipo de datos usado en las tablas es el entero **INTEGER** y como característica tiene que es un **PRIMARY KEY**.
 
 - La tabla al ser auto incremental indica que por ejemplo al ir agregando un dato ejemplo.
 
@@ -368,7 +372,7 @@ CREATE TABLE IF NOT EXISTS books (
 
     Estos ademas también tienen que ver con el tamaño en uso de memoria
 
-- seguido va otra columna para el autor **author** la cual se le hará una referencia numérica para trabajar como relación
+- seguido va otra columna para el autor **author_id INTEGER UNSIGNED** la cual se le hará una referencia numérica para trabajar como relación con la tabla que se crea en la siguiente clase
 
 - Seguido va otra columna para el titulo **title VARCHAR(100) NOT NULL**, donde el tipo de dato VARCHAR permite guardar una cadena de caracteres y lo que va entre paréntesis es la capacidad de caracteres que va a almacenar el titulo, **NOT NULL**, significa que no se permite vació. Esto refiere a que **NULL** como tal es un elemento vació pero en el momento que existen **""** o **''** significa que asi no exista nada ya no es un elemento vació
 
@@ -376,7 +380,7 @@ CREATE TABLE IF NOT EXISTS books (
 
 - Seguido va otra columna para el lenguaje **language VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language**, donde se coloca 2 como maximo de caracteres permitidos que seria la abreviación internacional para los idiomas y **COMMENT** es un comentario que se coloca en la tabla, pero que solamente puede ser visto por alguien que este usando la misma estructura de tabla en el Backend.
 
-- Seguido va otra columna para la imagen **cover url VARCHAR(500)**, la cual se recomienda no insertar en forma de imagen si no la Url para redirigir el acceso a una imagen
+- Seguido va otra columna para la imagen **cover_url VARCHAR(500)**, la cual se recomienda no insertar en forma de imagen si no la Url para redirigir el acceso a una imagen
 
 - Seguido va otra columna para el precio **price DOUBLE(6,2) NOT NULL DEFAULT 10.0** donde se indica que se va a colocar un decimal de 4 numeros + 2 decimales que van despues de la coma **0000.00**
 
@@ -385,3 +389,169 @@ CREATE TABLE IF NOT EXISTS books (
 - Seguido va otra columna que indica que por default esos libros tienen una copia **copies INTEGER NOT NULL DEFAULT 1**
 
 - Por ultimo viene la descripción **description TEXT** donde el tipo de dato es **TEXT** y este puede almacenar cualquier cantidad de caracteres
+
+
+## Clase 7 Tipos de columnas / Creación de la tabla authors
+
+Se crea la tabla para el autor que es la que tiene que relacionarse con la segunda columna de la primera tabla y para que se la relacion entre las mismas estas deben tener el mismo tipo de datos
+
+```
+CREATE TABLE IF NOT EXISTS authors(
+    author_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    nationality VARCHAR(3)
+);
+```
+
+a continuacion pegar en la consola la primer tabla y posteriormente la segunda tabla
+
+```
+mysql> CREATE TABLE IF NOT EXISTS books (
+    ->     book_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
+    ->     author_id INTEGER UNSIGNED,
+    ->     title VARCHAR(100) NOT NULL,
+    ->     year INTEGER UNSIGNED NOT NULL DEFAULT 1900,
+    ->     language VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language',
+    ->     cover_url VARCHAR(500),
+    ->     price DOUBLE(6,2) NOT NULL DEFAULT 10.0,
+    ->     sellable TINYINT(1) DEFAULT 1,
+    ->     copies INTEGER NOT NULL DEFAULT 1,
+    ->     description TEXT
+    -> );
+Query OK, 0 rows affected, 2 warnings (2.16 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS authors(
+    ->     author_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    ->     name VARCHAR(100) NOT NULL,
+    ->     nationality VARCHAR(3)
+    -> );
+Query OK, 0 rows affected (0.37 sec)
+
+mysql> show tables;
++----------------------------+
+| Tables_in_platzi_operation |
++----------------------------+
+| authors                    |
+| books                      |
++----------------------------+
+2 rows in set (0.00 sec)
+
+```
+
+los 3 warnings que en mi caso salieron informan que la especificacion de tipos de datos de punto flotante esta obsoleta y se eliminara en una version futura, y que la tabla books ya esta creada
+
+```
+mysql> show warnings
+    -> ;
++---------+------+------------------------------------------------------------------------------------------------------------------+
+| Level   | Code | Message                                                                                                          |
++---------+------+------------------------------------------------------------------------------------------------------------------+
+| Warning | 1681 | Specifying number of digits for floating point data types is deprecated and will be removed in a future release. |
+| Warning | 1681 | Integer display width is deprecated and will be removed in a future release.                                     |
+| Note    | 1050 | Table 'books' already exists                                                                                     |
++---------+------+------------------------------------------------------------------------------------------------------------------+
+3 rows in set (0.00 sec)
+
+```
+
+para mirar si hay contenido dentro de las tablas se usa la siguiente sentencia
+
+ ```
+mysql> select * from books;
+Empty set (0.00 sec)
+
+mysql> select * from authors;
+Empty set (0.00 sec)
+
+ ```
+
+ para borrar una tabla se usa la sentencia **DROP**, pero es recomendable que antes de hacer cualquier cosa observarla y estar segur(@) de lo que se esta haciendo, la sentencia sirve para eliminar una base de datos, contenido o tabla
+
+ ```
+mysql> DROP table authors;
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> show tables;
++----------------------------+
+| Tables_in_platzi_operation |
++----------------------------+
+| books                      |
++----------------------------+
+1 row in set (0.00 sec)
+ ```
+
+ en este caso se borra como ejemplo, porque no tiene datos y la estructura ya esta definida, entonces se vuelve a crear 
+
+ ```
+mysql> CREATE TABLE IF NOT EXISTS authors(     author_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,     name VARCHAR(100) NOT NULL,     nationality VARCHAR(3) );
+Query OK, 0 rows affected (1.04 sec)
+
+mysql> show tables;
++----------------------------+
+| Tables_in_platzi_operation |
++----------------------------+
+| authors                    |
+| books                      |
++----------------------------+
+2 rows in set (0.01 sec)
+
+mysql> 
+
+ ```
+
+ la sentencia **describe** y **desc**, indica que columnas existen en cada una de las tablas
+
+ ```
+mysql> describe authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   |     | NULL    |                |
+| nationality | varchar(3)   | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.12 sec)
+
+mysql> desc books;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| book_id     | int unsigned | NO   | PRI | NULL    | auto_increment |
+| author_id   | int unsigned | YES  |     | NULL    |                |
+| title       | varchar(100) | NO   |     | NULL    |                |
+| year        | int unsigned | NO   |     | 1900    |                |
+| language    | varchar(2)   | NO   |     | es      |                |
+| cover_url   | varchar(500) | YES  |     | NULL    |                |
+| price       | double(6,2)  | NO   |     | 10.00   |                |
+| sellable    | tinyint(1)   | YES  |     | 1       |                |
+| copies      | int          | NO   |     | 1       |                |
+| description | text         | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.01 sec)
+
+ ```
+
+ si se requiere ver el comentario que quedo en laguage se puede utilizar **show full columns rom books**
+
+ ```
+mysql> show full columns from books;
++-------------+--------------+--------------------+------+-----+---------+----------------+---------------------------------+--------------------+
+| Field       | Type         | Collation          | Null | Key | Default | Extra          | Privileges                      | Comment            |
++-------------+--------------+--------------------+------+-----+---------+----------------+---------------------------------+--------------------+
+| book_id     | int unsigned | NULL               | NO   | PRI | NULL    | auto_increment | select,insert,update,references |                    |
+| author_id   | int unsigned | NULL               | YES  |     | NULL    |                | select,insert,update,references |                    |
+| title       | varchar(100) | utf8mb4_0900_ai_ci | NO   |     | NULL    |                | select,insert,update,references |                    |
+| year        | int unsigned | NULL               | NO   |     | 1900    |                | select,insert,update,references |                    |
+| language    | varchar(2)   | utf8mb4_0900_ai_ci | NO   |     | es      |                | select,insert,update,references | ISO 639-1 Language |
+| cover_url   | varchar(500) | utf8mb4_0900_ai_ci | YES  |     | NULL    |                | select,insert,update,references |                    |
+| price       | double(6,2)  | NULL               | NO   |     | 10.00   |                | select,insert,update,references |                    |
+| sellable    | tinyint(1)   | NULL               | YES  |     | 1       |                | select,insert,update,references |                    |
+| copies      | int          | NULL               | NO   |     | 1       |                | select,insert,update,references |                    |
+| description | text         | utf8mb4_0900_ai_ci | YES  |     | NULL    |                | select,insert,update,references |                    |
++-------------+--------------+--------------------+------+-----+---------+----------------+---------------------------------+--------------------+
+10 rows in set (0.03 sec)
+
+ ```
+ la palabra **year** es una palabra reservada del lenguaje al igual que **language**, para que el lenguaje diferencie que es una palabra no reservada de su mismo lenguaje, se pueden colocar comillas sencillas invertidas entre ellas es decir **`year`**, **`language`**, **`description`**  y **`name`**. 
+
+ lo que se puede hacer es borrar la tabla hacer la correccion en estos valores y nuevamente crearlas repitiendo los pasos
