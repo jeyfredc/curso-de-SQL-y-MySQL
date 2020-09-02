@@ -13,7 +13,7 @@
 
 [Clase 5 Comando CREATE](#Clase-5-Comando-CREATE)
 
-[]()
+[Clase 6 Tipos de columnas / Creación de la tabla books](#Clase-6-Tipos-de-columnas-/-Creación-de-la-tabla-books)
 
 []()
 
@@ -240,3 +240,148 @@ Es una base de datos mas nueva, robusta y recuperable en caso de que exista un f
 Es una tabla directa, sencilla y rapida. Las operaciones y transacciones son 1 a 1 por tal razon la velocidad de lectura y escritura es mayor.
 
 Esto afecta la estrategia, existen 2 tipos de tablas o arquitectura que se van a usar que es una **tabla de catalogo** y una **tabla de operacion**, la diferencia es que la tabla de catalogo crecerá en un orden lento por tal razón se utilizara **InnoDb**, las tablas que crecen y se utilizan mucho acceso al disco duro sera en **MyISAM** para darle mayor agilidad al sistema
+
+
+## Clase 6 Tipos de columnas / Creación de la tabla books
+
+Primer comando a utilizar en la terminal de mysql
+
+```
+mysql> CREATE database platzi_operation;
+Query OK, 1 row affected (1.25 sec)
+```
+tambien crea la base con una pregunta condicional pero no se crea otra asi diga OK porque ya esta creada
+
+```
+mysql> CREATE DATABASE IF NOT EXISTS platzi_operation;
+Query OK, 1 row affected, 1 warning (0.03 sec)
+```
+
+pero al colocar SHOW warnings indica que no se puede crear esa tabla de datos porque ya existe
+
+```
+mysql> SHOW warnings;
++-------+------+-----------------------------------------------------------+
+| Level | Code | Message                                                   |
++-------+------+-----------------------------------------------------------+
+| Note  | 1007 | Can't create database 'platzi_operation'; database exists |
++-------+------+-----------------------------------------------------------+
+1 row in set (0.01 sec)
+
+```
+
+si nuevamente se coloca 
+
+```
+mysql> CREATE database platzi_operation;
+ERROR 1007 (HY000): Can't create database 'platzi_operation'; database exists
+```
+saca directamente un error donde ya no aparece **Query OK**, en la sentencia anterior se indica que si no puede suceder se muestra como **warning**, pero si depende del flujo el error es diferente
+
+con show databases se muestran las tablas que estan creadas en mysql
+
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| platzi_operation   |
+| sys                |
++--------------------+
+5 rows in set (0.09 sec)
+```
+para usar la tabla creada
+
+```
+mysql> use platzi_operation;
+Database changed
+```
+la sentencia indica que el puntero de la consola ahora se encuentra en la tabla
+
+si se ejecuta el siguiente comando
+
+```
+mysql> show tables;
+Empty set (0.01 sec)
+```
+sale **Empty set**, esta sentencia es cuando se hace un query a cualquier elemento de la base de datos y no trae algun tipo de informacion
+
+para empezar a crear la tabla se puede coger un documento vacio y especificar la siguiente instruccion, no ejecutar ni pegar en la terminal hasta que se indique en la siguiente clase.
+
+**Creacion de la libreria**
+```
+CREATE TABLE IF NOT EXISTS books (
+    book_id INTEGER UNSIGNED PRIMARY AUTO_INCREMENT, 
+    author ,
+    title VARCHAR(100) NOT NULL,
+    year INTEGER UNSIGNED NOT NULL DEFAULT 1900,
+    language VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language',
+    cover url VARCHAR(500),
+    price DOUBLE(6,2) NOT NULL DEFAULT 10.0,
+    sellable TINYINT(1) DEFAULT 1,
+    copies INTEGER NOT NULL DEFAULT 1,
+    description TEXT
+);
+```
+- Es una buena practica que cada tabla se llame en el plural del sustantivo que se va a guardar y es una practica o convención muy usada que le permite a otras personas identificar como se esta trabajando
+
+- **IF NOT EXISTS** es una sentencia para evitar crear posiblemente una tabla con el mismo nombre
+
+- Toda tabla necesita un Id que lo que hace es poder ubicar a una tupla de una manera única y para eso se debe usar un entero **(book_id INTEGER UNSIGNED PRIMARY AUTO_INCREMENT)** que sera auto incremental como lo indica la sentencia **AUTO_INCREMENT**, el primer tipo de datos usado en las tablas es el entero **INTEGER** y como característica tiene que es un **PRIMARY**.
+
+- La tabla al ser auto incremental indica que por ejemplo al ir agregando un dato ejemplo.
+
+    Pedro
+
+    Maria
+
+    Gonzalo
+
+    estos van a identificarse en orden:
+
+    1 Pedro
+
+    2 Maria
+
+    3 Gonzalo
+    
+    pero en el caso que se elimine cualquiera de estos por ejemplo el 3 que es Gonzalo, e ingresar un 4 dato(Julio), así no exista el 3 dato, la secuencia va continuar
+
+    1 Pedro
+
+    2 Maria
+
+    4 Julio
+
+- la sentencia **UNSIGNED** sirve para que el numero no muestre un valor de negativo o positivo, se podría llamar como absoluto para que no diferencie entre los 2
+
+- Existen otra sentencias para los enteros como lo son:
+
+    **TINYINT**: Es un número entero con o sin signo. Con signo el rango de valores válidos va desde -128 a 127. Sin signo, el rango de valores es de 0 a 255
+
+    **BIGINT**: Número entero con o sin signo. Con signo el rango de valores va desde -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807. Sin signo el rango va desde 0 a 18.446.744.073.709.551.615.
+
+    **INTEGER**: Número entero con o sin signo. Con signo el rango de valores va desde -2147483648 a 2147483647. Sin signo el rango va desde 0 a 429.4967.295
+
+    Estos ademas también tienen que ver con el tamaño en uso de memoria
+
+- seguido va otra columna para el autor **author** la cual se le hará una referencia numérica para trabajar como relación
+
+- Seguido va otra columna para el titulo **title VARCHAR(100) NOT NULL**, donde el tipo de dato VARCHAR permite guardar una cadena de caracteres y lo que va entre paréntesis es la capacidad de caracteres que va a almacenar el titulo, **NOT NULL**, significa que no se permite vació. Esto refiere a que **NULL** como tal es un elemento vació pero en el momento que existen **""** o **''** significa que asi no exista nada ya no es un elemento vació
+
+- Seguido va otra columna para el año **year INTEGER UNSIGNED NOT NULL DEFAULT 1900**, el **DEFAULT** se indica como un ejemplo para este caso que el año viene predeterminado con 1900
+
+- Seguido va otra columna para el lenguaje **language VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language**, donde se coloca 2 como maximo de caracteres permitidos que seria la abreviación internacional para los idiomas y **COMMENT** es un comentario que se coloca en la tabla, pero que solamente puede ser visto por alguien que este usando la misma estructura de tabla en el Backend.
+
+- Seguido va otra columna para la imagen **cover url VARCHAR(500)**, la cual se recomienda no insertar en forma de imagen si no la Url para redirigir el acceso a una imagen
+
+- Seguido va otra columna para el precio **price DOUBLE(6,2) NOT NULL DEFAULT 10.0** donde se indica que se va a colocar un decimal de 4 numeros + 2 decimales que van despues de la coma **0000.00**
+
+- Seguido va otra columna para indicar si se puede vender o no **price DOUBLE(6,2) NOT NULL DEFAULT 10.0,**, el parámetro recibe solo 0 o 1, es decir falso o verdadero y por default viene que si es vendible
+
+- Seguido va otra columna que indica que por default esos libros tienen una copia **copies INTEGER NOT NULL DEFAULT 1**
+
+- Por ultimo viene la descripción **description TEXT** donde el tipo de dato es **TEXT** y este puede almacenar cualquier cantidad de caracteres
