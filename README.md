@@ -134,7 +134,7 @@ mysql> FLUSH PRIVILEGES;
 despues nuevamente colocar la sentencia
 
 ```
-mysql>ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+SELECT user,authentication_string,plugin,host FROM mysql.user;
 ```
 En esta va aparecer nuevamente el cuadro pero ya van aparecer los campos de  authentication_string y plugin diferentes
 
