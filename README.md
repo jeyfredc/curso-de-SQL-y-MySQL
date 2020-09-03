@@ -18,7 +18,7 @@
 
 [Clase 8 Tipos de columnas usando / Creación de la tabla clientes](#Clase-8-Tipos-de-columnas-usando-/-Creación-de-la-tabla-clientes)
 
-[]()
+[Clase 9 Comando INSERT](#Clase-9-Comando-INSERT)
 
 []()
 
@@ -625,3 +625,123 @@ CREATE TABLE IF NOT EXISTS operations(
     finished TINYINT(1) NOT NULL -- esta ultima se coloca en caso que el libro este vendido
 );
 ```
+
+## Clase 9 Comando INSERT
+
+La manera en la que se ingresan datos a cualquiera de la tabla es mediante la siguiente sintaxis
+
+```
+INSERT INTO TABLE --nombre de la tabla(parametros definidos)
+VALUES --(parametros a ingresar);
+```
+en este caso se va a insertar informacion a la tabla de libros **books**
+
+para hacerlo lo primero que hay que hacer es ver como esta construida
+
+```
+mysql> desc authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   |     | NULL    |                |
+| nationality | varchar(3)   | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.16 sec)
+
+```
+
+posteriormente se procede a ingresar la informacion, pero existen 3 formas:
+
+1. Para la version en que esta hecha la clase ya no se acepta el primer valor vacio entre comillas por tanto se cambia a 1
+    ```
+    mysql> INSERT INTO authors(author_id, name, nationality)
+    -> VALUES (1, 'Juan Rulfo', 'MEX');
+    Query OK, 1 row affected (0.23 sec)
+
+    ```
+
+2. La segunda forma no pasa la asignacion de numero por lo que es autoincrementable
+
+    ```
+    mysql> INSERT INTO authors(name, nationality)
+    -> VALUES('Gabriel Garcia Marquez', 'COL');
+    Query OK, 1 row affected (0.13 sec)
+    ```
+
+3. La tercer forma se pasan todos los parametros pero sin indicar los parametros definidos pero si los que se van a ingresar 
+
+    ```
+    mysql> INSERT INTO authors
+    -> VALUES(3, 'Juan Gabriel Vazquez', 'COL');
+    Query OK, 1 row affected (0.32 sec)
+
+    ```
+
+para mirar los datos ingresados en la tabla
+
+```
+mysql> select * from authors;
++-----------+------------------------+-------------+
+| author_id | name                   | nationality |
++-----------+------------------------+-------------+
+|         1 | Juan Rulfo             | MEX         |
+|         2 | Gabriel Garcia Marquez | COL         |
+|         3 | Juan Gabriel Vazquez   | COL         |
++-----------+------------------------+-------------+
+3 rows in set (0.02 sec)
+
+```
+
+4. La cuarta forma es ingresar datos masivamente teniendo en cuenta que son tuplas separadas por "," y al final no se van a ingresar hasta no finalizar con un ";", tambien se debe tener en cuenta que por regla general la insercion de datos es una buena idea que se ingresen por tuplas de 50 datos
+
+    ```
+    mysql> INSERT INTO authors(name, nationality)
+        -> VALUES('Julio Cortazar', 'ARG'),
+        -> ('Isabel Allende', 'CHI'),
+        -> ('Octavio Paz', 'MEX'),
+        -> ('Juan Carlos Onetti', 'URU')
+        -> 
+        -> 
+        -> ;
+    Query OK, 4 rows affected (0.10 sec)
+    Records: 4  Duplicates: 0  Warnings: 0
+
+    mysql> select * from authors;
+    +-----------+------------------------+-------------+
+    | author_id | name                   | nationality |
+    +-----------+------------------------+-------------+
+    |         1 | Juan Rulfo             | MEX         |
+    |         2 | Gabriel Garcia Marquez | COL         |
+    |         3 | Juan Gabriel Vazquez   | COL         |
+    |         4 | Julio Cortazar         | ARG         |
+    |         5 | Isabel Allende         | CHI         |
+    |         6 | Octavio Paz            | MEX         |
+    |         7 | Juan Carlos Onetti     | URU         |
+    +-----------+------------------------+-------------+
+    7 rows in set (0.00 sec)
+
+    ```
+5. Existe el caso como en el primero que si se asigna un id que no existe la base de datos la va a tomar y asignar a una tupla
+
+    ```
+    mysql> INSERT INTO authors(author_id, name)
+        -> VALUES (16, 'Pablo Neruda');
+    Query OK, 1 row affected (0.06 sec)
+    
+    mysql> select * from authors;
+    +-----------+------------------------+-------------+
+    | author_id | name                   | nationality |
+    +-----------+------------------------+-------------+
+    |         1 | Juan Rulfo             | MEX         |
+    |         2 | Gabriel Garcia Marquez | COL         |
+    |         3 | Juan Gabriel Vazquez   | COL         |
+    |         4 | Julio Cortazar         | ARG         |
+    |         5 | Isabel Allende         | CHI         |
+    |         6 | Octavio Paz            | MEX         |
+    |         7 | Juan Carlos Onetti     | URU         |
+    |        16 | Pablo Neruda           | NULL        |
+    +-----------+------------------------+-------------+
+    8 rows in set (0.00 sec)
+    
+    ```

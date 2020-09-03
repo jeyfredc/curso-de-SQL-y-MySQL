@@ -29,11 +29,29 @@ CREATE TABLE clients (
 );
 
 CREATE TABLE IF NOT EXISTS operations(
-    operation_id ,
-    book_id ,
-    client_id ,
-    type prestado, devuelto, vendido, -- se debe colocar la opcion o el estado en el que se encuentra
-    created_at,
-    updated_at,
-    finished TINYINT(1) NOT NULL -- esta ultima se coloca en caso que el libro este vendido
+    operation_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    book_id INTEGER UNSIGNED,
+    client_id INTEGER UNSIGNED,
+    `type` ENUM('Borrowed', 'Returned', 'Sold') NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    finished TINYINT(1) NOT NULL DEFAULT 0
 );
+
+INSERT INTO authors(author_id, name, nationality)
+VALUES (1, 'Juan Rulfo', 'MEX');
+
+INSERT INTO authors(name, nationality)
+VALUES('Gabriel Garcia Marquez', 'COL');
+
+INSERT INTO authors
+VALUES(3, 'Juan Gabriel Vazquez', 'COL');
+
+INSERT INTO authors(name, nationality)
+VALUES('Julio Cortazar', 'ARG'),
+('Isabel Allende', 'CHI'),
+('Octavio Paz', 'MEX'),
+('Juan Carlos Onetti', 'URU');
+
+INSERT INTO authors(author_id, name)
+VALUES (16, 'Pablo Neruda');
