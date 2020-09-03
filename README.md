@@ -1,5 +1,4 @@
-# curso-de-SQL-y-MySQL
-
+# Curso de SQL y MsQL realizado en Platzi
 
 **Contenido**
 
@@ -17,7 +16,7 @@
 
 [Clase 7 Tipos de columnas / Creación de la tabla authors](#Clase-7-Tipos-de-columnas-/-Creación-de-la-tabla-authors)
 
-[]()
+[Clase 8 Tipos de columnas usando / Creación de la tabla clientes](#Clase-8-Tipos-de-columnas-usando-/-Creación-de-la-tabla-clientes)
 
 []()
 
@@ -575,3 +574,54 @@ CREATE TABLE IF NOT EXISTS authors(
  ```
 
  lo que se puede hacer es borrar la tabla hacer la correccion en estos valores y nuevamente crearlas repitiendo los pasos
+
+ ## Clase 8 Tipos de columnas usando / Creación de la tabla clientes
+
+Se crea la tabla para los clientes con la siguiente estructura la cual se van a explicar algunas cosas que tienen distintas de las anteriores
+
+```
+CREATE TABLE clients (
+    client_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    birthdate DATETIME,
+    gender ENUM('M', 'F', 'ND') NOT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+Como siempre la primer columna va a ser la que lleva el id por tanto queda como **client_id INTEGER UNSIGNED PRIMARY KEY** pero.
+
+**¿Que pasa si no se coloca el AUTO_INCREMENT?**
+
+Lo primero a resaltar es que sigue siendo una llave primaria de tipo entero, que solo acepta positivos o considerado como un valor absoluto, pero hay aplicaciones cuya capa de negocios ajenos a la base de datos determina cual es el id que le corresponde a culquier tupla que se este insertando y esto puede ser bastante util pero en general muchas de las formas de las bases de datos empieza con **AUTO_INCREMENT**, y esto adicional garantiza el no tener inconvenientes mas adelante 
+
+La sentencia **UNIQUE** significa que es un tipo de llave en donde el valor de la columna tiene que ser unico para cada tupla, garantiza tambien la duplicidad de cualquier dato 
+
+La sentencia **DATETIME** es un valor cualquiera de fecha, incluso anterior a la epoca y por ejemplo los cumpleaños deben llevar esta sentencia 
+
+La sentencia **TIMESTAMP** se almacena de la siguiente forma 'yyyy-mm-dd hh:mm:ss', esta sentencia esta basada en el numero epoch, que es el numero de segundos que han pasado desde el 1 de enero de 1970 a la fecha y es asi porque es donde se determina el inicio de las computadoras, esta sentencia no puede hacer todo lo que hace **DATETIME**, pero **DATETIME** si puede hacer lo que hace **TIMESTAMP** pero no es tan eficiente o rapido a la hora de hacer calculos, no guarda segundos y de una forma diferente 
+
+**gender ENUM('M', 'F', 'ND') NOT NULL** ENUM es una enumeracion de datos, esto se usa para decirle a la base de datos cuales son las unicas opciones que se pueden tomar en este caso seria, masculino o femenino o no definido pero no acepta ninguna otra opcion.
+
+Ninguna tupla de una base de datos se borra jamas y es por esta razon que se deja la siguiente sentencia **active TINYINT(1) NOT NULL DEFAULT 1**, es decir si el cliente en fin de cuentas esta activo o no activo y por default va a ser 1 que es activo
+
+**created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP** la palabra **CURRENT_TIMESTAMP**, significa que cuando se inserte algo en la columna y si no viene de todas formas va a insertar el valor que tiene el computador 
+
+**updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP** al agregar **ON UPDATE CURRENT_TIMESTAMP** sirve para tomar la hora que toma del computador en el momento de alguna actualizacion, por ejemplo con **CURRENT_TIMESTAMP** se guarda desde el momento de la fecha de creacion y nunca se va a borrar pero con **ON UPDATE CURRENT_TIMESTAMP** si se realiza una modificacion sobre el cliente va a tomar la fecha y hora en que se actualizo ese cliente 
+
+A continuacion se presenta el reto de la siguiente tabla para crear la cual lleva esta sintaxis y se debe completar
+
+```
+CREATE TABLE IF NOT EXISTS operations(
+    operation_id ,
+    book_id ,
+    client_id ,
+    type prestado, devuelto, vendido, -- se debe colocar la opcion o el estado en el que se encuentra
+    created_at,
+    updated_at,
+    finished TINYINT(1) NOT NULL -- esta ultima se coloca en caso que el libro este vendido
+);
+```

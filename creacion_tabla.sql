@@ -16,3 +16,24 @@ CREATE TABLE IF NOT EXISTS authors(
     `name` VARCHAR(100) NOT NULL,
     nationality VARCHAR(3)
 );
+
+CREATE TABLE clients (
+    client_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    birthdate DATETIME,
+    gender ENUM('M', 'F', 'ND') NOT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS operations(
+    operation_id ,
+    book_id ,
+    client_id ,
+    type prestado, devuelto, vendido, -- se debe colocar la opcion o el estado en el que se encuentra
+    created_at,
+    updated_at,
+    finished TINYINT(1) NOT NULL -- esta ultima se coloca en caso que el libro este vendido
+);
