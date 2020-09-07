@@ -24,9 +24,9 @@
 
 [Clase 11 Inserción de datos usando queries anidados](#Clase-11-Inserción-de-datos-usando-queries-anidados)
 
-[]()
+[Clase 12 Bash y archivos SQL](#Clase-12-Bash-y-archivos-SQL)
 
-[]()
+[Clase 13 Su majestad el SELECT](#Clase-13-Su-majestad-el-SELECT)
 
 []()
 
@@ -941,3 +941,118 @@ mysql> select * from books;
 2 rows in set (0.00 sec)
 
 ```
+
+## Clase 12 Bash y archivos SQL
+
+en esta clase se crea una base de datos parecida a **plati_operation**, la base de datos se llamara **pruebaplatzi**
+
+Lo primero que se va a hacer es consultar que bases de datos existen en mysql, en mi consola actualmente esto es lo que existe
+
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| platzi_operation   |
+| sys                |
++--------------------+
+5 rows in set (0.04 sec)
+
+```
+
+para efectos del curso quedan los archivos de la nueva base de datos en una carpeta llamada **cursoplatzi** y el archivo de nombre **all.sql**,este archivo contiene la misma informacion que **platzi_operation**,y **all_schema.sql** contiene informacion de clientes, libros, transacciones y las tablas creadas en **all.sql**
+
+solo hay que tener cuidado con esta sentencia que aparece en la primer linea,
+
+```
+DROP DATABASE IF EXISTS pruebaplatzi;
+```
+
+la cual despues de ser ejecutada para tener seguridad lo mejor es comentarla con **--**
+
+para crear la nueva base de datos en la terminal, se abre la terminal y en vez de ingresar con la sentencia **mysql -u root -h localhost -p** se ingresa lo siguiente
+
+```
+mysql -u root -p <all.sql
+```
+
+**se debe tener en cuenta que debe estar en la carpeta curso platzi para ejecutar en la terminal y asi crear la base de datos** en el caso de mi PC esta es mi ruta la cual se puede ejecutar con pwd
+
+**/home/jeyfred/Documentos/Cursos_platzi/Curso-de-SQL-y-MySQL/cursoplatzi**
+
+![assets/7.png](assets/7.png)
+
+despues de esto si se puede ejecutar la creacion de la nueva tabla 
+
+![assets/8.png](assets/8.png)
+
+Es importante comentar la primer linea del archivo **all.sql** para asegurar que despues no se borre la base de datos
+
+```
+--DROP DATABASE IF EXISTS pruebaplatzi;
+```
+
+ahora si se puede comprobar que exista la base de datos **pruebaplatzi**
+
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| platzi_operation   |
+| pruebaplatzi       |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+```
+
+y a continuacion migrar o traer la informacion de clientes, libros, autores y transacciones, dentro de la misma carpeta **cursoplatzi** en la terminal con el otro archivo **all_schema.sql**
+
+```
+mysql -u root -p <all_schema.sql
+```
+![assets/9.png](assets/9.png)
+
+y luego consultar la informacion que tienen las tablas de la nueva base de datos
+
+```
+mysql> use pruebaplatzi;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_pruebaplatzi |
++------------------------+
+| authors                |
+| books                  |
+| clients                |
+| transactions           |
++------------------------+
+4 rows in set (0.00 sec)
+
+```
+
+a partir de esto tambien se puede consultar la informacion en cada uno con las sentencias
+
+```
+mysql> select * from authors;
+```
+```
+mysql> select * from books;
+```
+```
+mysql> select * from clients;
+```
+```
+mysql> select * from transactions;
+```
+
+## Clase 13 Su majestad el SELECT
