@@ -94,3 +94,81 @@ SELECT name, email, YEAR(NOW()) - YEAR(birthdate) AS Edad_Actual, gender
 FROM clients
 WHERE gender = 'F'
 AND `name` LIKE '%Lop%';
+
+
+-- Sentencia usando JOIN para traer id del libro, nombre y titulo del autor
+
+SELECT b.book_id, a.name, a.author_id, b.title
+FROM books AS b
+JOIN authors AS a
+ON a.author_id = b.author_id
+WHERE a.author_id BETWEEN 1 AND 5;
+
+-- Sentencia para modificar la columna type en la tabla de transacciones
+
+INSERT INTO transactions(transaction_id, book_id, client_id, `type`, `finished`) 
+VALUES(1, 12, 34, 'sell', 1),
+(2, 54, 87, 'lend', 0),
+(3, 3, 14, 'sell', 1),
+(4, 1, 54, 'sell', 1),
+(5, 12, 81, 'lend', 1),
+(6, 12, 81, 'return', 1),
+(7, 87, 29, 'sell', 1);
+
+
+-- Sentencia para agregar datos a la tabla de transacciones
+
+INSERT INTO transactions(transaction_id, book_id, client_id, `type`, `finished`) 
+VALUES(1, 12, 34, 'sell', 1),
+(2, 54, 87, 'lend', 0),
+(3, 3, 14, 'sell', 1),
+(4, 1, 54, 'sell', 1),
+(5, 12, 81, 'lend', 1),
+(6, 12, 81, 'return', 1),
+(7, 87, 29, 'sell', 1);
+
+-- Sentencia para unir las tablas de transacciones, libros y clientes con JOIN sin condiciones
+
+SELECT c.name, b.title, t.type
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+ON t.client_id = c.client_id;
+
+-- Sentencia para unir las tablas de transacciones, libros y clientes con JOIN con condiciones
+
+SELECT c.name, b.title, t.type
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+ON t.client_id = c.client_id
+WHERE c.gender = 'F'
+AND t.TYPE = 'sell';
+
+-- Sentencia para unir las tablas de transacciones, libros, clientes y autores con JOIN con condiciones
+
+SELECT c.name AS client, b.title , a.name AS author, t.type 
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+ON t.client_id = c.client_id
+JOIN authors AS a
+ON b.author_id = a.author_id
+WHERE c.gender = 'F'
+AND t.TYPE = 'sell';
+
+-- 
+
+SELECT c.name AS client, b.title , a.name AS author, t.type 
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+ON t.client_id = c.client_id
+JOIN authors AS a
+ON b.author_id = a.author_id
+WHERE c.gender = 'M'
+AND t.TYPE IN ('sell', 'lend');

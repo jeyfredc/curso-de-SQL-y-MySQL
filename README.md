@@ -28,7 +28,7 @@
 
 [Clase 13 Su majestad el SELECT](#Clase-13-Su-majestad-el-SELECT)
 
-[]()
+[Clase 14 Comando JOIN](#Clase-14-Comando-JOIN)
 
 []()
 
@@ -1949,3 +1949,324 @@ mysql> SELECT name, email, YEAR(NOW()) - YEAR(birthdate) AS edad_actual, gender
 
 y de esta forma se empiezan a realizar consultas en bases de datos con pequeñas sentencias
 
+## Clase 14 Comando JOIN
+
+para trabajar con JOIN se va a realizar un cruce de informacion ademas de visualizar algunas cosas que no se han visto
+
+Empezando por consultar cuantos autores y libros existen en base de datos teniendo en cuenta que un autor puede tener varios libros
+
+```
+mysql>  SELECT count(*) FROM authors;
++----------+
+| count(*) |
++----------+
+|      132 |
++----------+
+1 row in set (0.01 sec)
+
+mysql>  SELECT count(*) FROM books;
++----------+
+| count(*) |
++----------+
+|      197 |
++----------+
+1 row in set (0.10 sec)
+
+```
+
+A continuacion existen 2 formas de consultar los primneros 5 autores de la base de datos con la sentencia a continuacion la cual es una condicional
+
+```
+mysql> SELECT * FROM authors WHERE author_id > 0 and author_id <=5;
++-----------+--------------------+-------------+
+| author_id | name               | nationality |
++-----------+--------------------+-------------+
+|         1 | Sam Altman         | USA         |
+|         2 | Freddy Vega        | COL         |
+|         3 | Arthur Conan Doyle | GBR         |
+|         4 | Chuck Palahniuk    | USA         |
+|         5 | Juan Rulfo         | MEX         |
++-----------+--------------------+-------------+
+5 rows in set (0.02 sec)
+```
+Ahora se va a consultar los libros que contienen los 5 autores, la sentencia **BETWEEN** refiere entre 1 y 5
+
+```
+mysql> SELECT * FROM books WHERE author_id BETWEEN 1 AND 5;
++---------+-----------+---------------------------------------+------+----------+-----------+-------+----------+--------+-----------------------------------------------+
+| book_id | author_id | title                                 | year | language | cover_url | price | sellable | copies | description                                   |
++---------+-----------+---------------------------------------+------+----------+-----------+-------+----------+--------+-----------------------------------------------+
+|       1 |         1 | The Startup Playbook                  | 2013 | en       | NULL      | 10.00 |        1 |      5 | Advice from the experts                       |
+|       2 |         1 | The Startup Playbook                  | 2014 | es       | NULL      | 10.00 |        1 |      5 | Consejo de los expertos, traducido por Platzi |
+|       3 |         3 | Estudio en escarlata                  | 1887 | es       | NULL      |  5.00 |        1 |     10 | La primera novela de Sherlock Holmes          |
+|      12 |         5 | El llano en llamas                    | 1953 | es       | NULL      | 10.00 |        0 |      1 | Cuentos mexicanos                             |
+|      41 |         3 | The - Vol I Complete Sherlock Holmes  | 1900 | en       | NULL      |  NULL |        1 |      4 | NULL                                          |
+|      42 |         3 | The - Vol II Complete Sherlock Holmes | 1900 | en       | NULL      |  NULL |        1 |      4 | NULL                                          |
++---------+-----------+---------------------------------------+------+----------+-----------+-------+----------+--------+-----------------------------------------------+
+6 rows in set (0.00 sec)
+
+```
+ ahora solo se traeran datos especificos
+
+ ```
+ mysql> SELECT book_id, author_id, title FROM books WHERE author_id BETWEEN 1 AND 5;
++---------+-----------+---------------------------------------+
+| book_id | author_id | title                                 |
++---------+-----------+---------------------------------------+
+|       1 |         1 | The Startup Playbook                  |
+|       2 |         1 | The Startup Playbook                  |
+|       3 |         3 | Estudio en escarlata                  |
+|      12 |         5 | El llano en llamas                    |
+|      41 |         3 | The - Vol I Complete Sherlock Holmes  |
+|      42 |         3 | The - Vol II Complete Sherlock Holmes |
++---------+-----------+---------------------------------------+
+6 rows in set (0.00 sec)
+
+ ```
+
+ pero lo que se quiere hacer es traer los nombres de esos autores y para eso se van a usar los **JOINS** con la siguiente sentencia
+
+ ```
+mysql> SELECT b.book_id, a.name, b.title
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5;
++---------+--------------------+---------------------------------------+
+| book_id | name               | title                                 |
++---------+--------------------+---------------------------------------+
+|       1 | Sam Altman         | The Startup Playbook                  |
+|       2 | Sam Altman         | The Startup Playbook                  |
+|       3 | Arthur Conan Doyle | Estudio en escarlata                  |
+|      12 | Juan Rulfo         | El llano en llamas                    |
+|      41 | Arthur Conan Doyle | The - Vol I Complete Sherlock Holmes  |
+|      42 | Arthur Conan Doyle | The - Vol II Complete Sherlock Holmes |
++---------+--------------------+---------------------------------------+
+6 rows in set (0.00 sec)
+ ```
+
+ - Primer sentencia **SELECT b.book_id, a.name, b.title**, traer libro, nombre del autor y el titulo del libro
+
+ - Segunda sentencia **FROM books AS b**, books en vez de llamar completamente books cambiarlo por una b como abreviacion
+
+ - Tercer sentencia **JOIN authors AS a** indica de dónde se deben traer los datos y puede ayudar a hacer sentencias y filtros complejos cuando se quieren unir tablas, en este caso se esta indicando que se una con autores y se authors se cambie por una a como abreviacion
+
+ - Cuarta sentencia **ON a.author_id = b.author_id** lo que se esta haciendo es reemplazar los datos de la tabla 1 que es donde estan los nombres de los autores en la tabla 2 donde antes solo se tenia el id como un numero
+
+ - Quinta sentencia **WHERE a.author_id BETWEEN 1 AND 5;** especifica que solo traiga los valores entre los primeros 5 autores
+
+ El otro campo que se puede traer es el de el numero del autor para poderlo identificar tan solo añadiendo a la sentencia anterior **a.author_id**
+
+ ```
+mysql> SELECT b.book_id, a.name, a.author_id, b.title
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5;
++---------+--------------------+-----------+---------------------------------------+
+| book_id | name               | author_id | title                                 |
++---------+--------------------+-----------+---------------------------------------+
+|       1 | Sam Altman         |         1 | The Startup Playbook                  |
+|       2 | Sam Altman         |         1 | The Startup Playbook                  |
+|       3 | Arthur Conan Doyle |         3 | Estudio en escarlata                  |
+|      12 | Juan Rulfo         |         5 | El llano en llamas                    |
+|      41 | Arthur Conan Doyle |         3 | The - Vol I Complete Sherlock Holmes  |
+|      42 | Arthur Conan Doyle |         3 | The - Vol II Complete Sherlock Holmes |
++---------+--------------------+-----------+---------------------------------------+
+6 rows in set (0.00 sec)
+
+
+ ```
+ En el caso del autor No. 4 el cual no aparece se puede consultar, pero este autor no tiene ningun libro escrito y por tanto no aparece
+
+ ```
+mysql> select name from authors where author_id = 4;
++-----------------+
+| name            |
++-----------------+
+| Chuck Palahniuk |
++-----------------+
+1 row in set (0.00 sec)
+ ```
+
+ Ahora lo que se va a hacer es introducir informacion a la tabla de transacciones y luego esta informacion es necesaria traducirla
+
+ ```
+INSERT INTO transactions(transaction_id, book_id, client_id, `type`, `finished`) 
+VALUES(1, 12, 34, 'sell', 1),
+(2, 54, 87, 'lend', 0),
+(3, 3, 14, 'sell', 1),
+(4, 1, 54, 'sell', 1),
+(5, 12, 81, 'lend', 1),
+(6, 12, 81, 'return', 1),
+(7, 87, 29, 'sell', 1);
+ ```
+
+Es posible que se genere un error porque en la tabla transactions en el archivo **all.sql** no quedo creado el valor return tal y como se muestra a continuacion
+
+ ```
+CREATE TABLE `transactions` (
+  `transaction_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `book_id` int(10) unsigned NOT NULL,
+  `client_id` int(10) unsigned NOT NULL,
+  `type` enum('lend','sell') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `finished` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`transaction_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ ```
+
+ para actualizar o agregar el valor **return** se usa la sentencia **ALTER TABLE** y se modifica la columna con **MODIFY COLUMN**
+
+ ```
+mysql> ALTER TABLE  transactions 
+    -> MODIFY COLUMN  `type` enum(
+    -> 'sell', 'lend', 'return') 
+    -> NOT NULL AFTER client_id; 
+Query OK, 0 rows affected (2.92 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+ ```
+despues de esta sentencia si se puede agregar la informacion a la tabla de transacciones
+
+```
+mysql> INSERT INTO transactions(transaction_id, book_id, client_id, `type`, `finished`) 
+    -> VALUES(1, 12, 34, 'sell', 1),
+    -> (2, 54, 87, 'lend', 0),
+    -> (3, 3, 14, 'sell', 1),
+    -> (4, 1, 54, 'sell', 1),
+    -> (5, 12, 81, 'lend', 1),
+    -> (6, 12, 81, 'return', 1),
+    -> (7, 87, 29, 'sell', 1);
+Query OK, 7 rows affected (0.09 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+```
+luego se consulta la informacion de la base de datos de transacciones y posteriormente lo que se va a realizar es traducir esa informacion de tal manera que se pueda leer de otra forma
+
+```
+mysql> select * from transactions;
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+| transaction_id | book_id | client_id | type   | created_at          | modified_at         | finished |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+|              1 |      12 |        34 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              2 |      54 |        87 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        0 |
+|              3 |       3 |        14 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              4 |       1 |        54 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              5 |      12 |        81 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              6 |      12 |        81 | return | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              7 |      87 |        29 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+7 rows in set (0.00 sec)
+```
+
+**observacion** primero es mejor pensar que es lo que se quiere traer, en este caso es el nombre del cliente, el libro y el estado de este, lo primero que se hace es la siguiente sentencia
+
+```
+SELECT
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+On t.client_id = c.client_id
+```
+
+cuando ya se quiere traer la informacion en el SELECT agrego el restante que es el nombre del cliente, el libro y el estado
+
+```
+SELECT c.name, b.title, t.type
+FROM transactions AS t
+JOIN books AS b
+ON t.book_id = b.book_id
+JOIN clients AS c
+ON t.client_id = c.client_id;
+```
+
+y se ejecuta en mysql, esta sentencia traera toda la informacion porque no existe ninguna condicion
+
+```
+mysql> SELECT c.name, b.title, t.type
+    -> FROM transactions AS t
+    -> JOIN books AS b
+    -> ON t.book_id = b.book_id
+    -> JOIN clients AS c
+    -> ON t.client_id = c.client_id;
++-----------------------+--------------------------------------+--------+
+| name                  | title                                | type   |
++-----------------------+--------------------------------------+--------+
+| Maria Teresa Castillo | El llano en llamas                   | sell   |
+| Luis Saez             | Tales of Mystery and Imagination     | lend   |
+| Jose Maria Bermudez   | Estudio en escarlata                 | sell   |
+| Rafael Galvez         | The Startup Playbook                 | sell   |
+| Antonia Giron         | El llano en llamas                   | lend   |
+| Antonia Giron         | El llano en llamas                   | return |
+| Juana Maria Lopez     | Vol 39 No. 1 Social Choice & Welfare | sell   |
++-----------------------+--------------------------------------+--------+
+7 rows in set (0.01 sec)
+
+```
+
+Ahora con condiciones, donde se trae la informacion de todos los libros que se vendieron a una mujer, el nombre y el titulo del libro
+
+```
+mysql> SELECT c.name, b.title, t.type
+    -> FROM transactions AS t
+    -> JOIN books AS b
+    -> ON t.book_id = b.book_id
+    -> JOIN clients AS c
+    -> ON t.client_id = c.client_id
+    -> WHERE c.gender = 'F'
+    -> AND t.TYPE = 'sell';
++-----------------------+--------------------------------------+------+
+| name                  | title                                | type |
++-----------------------+--------------------------------------+------+
+| Maria Teresa Castillo | El llano en llamas                   | sell |
+| Juana Maria Lopez     | Vol 39 No. 1 Social Choice & Welfare | sell |
++-----------------------+--------------------------------------+------+
+2 rows in set (0.00 sec)
+```
+
+En este se trae al autor agregando otro **JOIN** para los autores 
+
+```
+mysql> SELECT c.name AS client, b.title, a.name AS author, t.type 
+    -> FROM transactions AS t
+    -> JOIN books AS b
+    -> ON t.book_id = b.book_id
+    -> JOIN clients AS c
+    -> ON t.client_id = c.client_id
+    -> JOIN authors AS a
+    -> ON b.author_id = a.author_id
+    -> WHERE c.gender = 'F'
+    -> AND t.TYPE = 'sell';
++-----------------------+--------------------------------------+------------+------+
+| client                | title                                | author     | type |
++-----------------------+--------------------------------------+------------+------+
+| Maria Teresa Castillo | El llano en llamas                   | Juan Rulfo | sell |
+| Juana Maria Lopez     | Vol 39 No. 1 Social Choice & Welfare | Various    | sell |
++-----------------------+--------------------------------------+------------+------+
+2 rows in set (0.00 sec)
+
+```
+y en este caso se utliza la sentencia **IN** para indicar que tome mas opciones a parte de **sell** y se cambia **gender** por **'M'**
+
+```
+mysql> SELECT c.name AS client, b.title , a.name AS author, t.type 
+    -> FROM transactions AS t
+    -> JOIN books AS b
+    -> ON t.book_id = b.book_id
+    -> JOIN clients AS c
+    -> ON t.client_id = c.client_id
+    -> JOIN authors AS a
+    -> ON b.author_id = a.author_id
+    -> WHERE c.gender = 'M'
+    -> AND t.TYPE IN ('sell', 'lend');
++---------------------+----------------------------------+--------------------+------+
+| client              | title                            | author             | type |
++---------------------+----------------------------------+--------------------+------+
+| Luis Saez           | Tales of Mystery and Imagination | Edgar Allen Poe    | lend |
+| Jose Maria Bermudez | Estudio en escarlata             | Arthur Conan Doyle | sell |
+| Rafael Galvez       | The Startup Playbook             | Sam Altman         | sell |
++---------------------+----------------------------------+--------------------+------+
+3 rows in set (0.00 sec)
+```
