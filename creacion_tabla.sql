@@ -239,3 +239,44 @@ ON b.author_id = a.author_id
 WHERE a.author_id BETWEEN 1 AND 5
 GROUP BY a.author_id
 ORDER BY a.author_id;
+
+1. ¿Qué nacionalidades hay?
+
+SELECT nationality FROM authors;
+
+SELECT DISTINCT nationality FROM authors;
+
+2. ¿Cuántos escritores hay de cada nacionalidad?
+
+SELECT nationality, COUNT(author_id) AS c_authors
+FROM authors
+GROUP BY nationality
+ORDER BY c_authors DESC, nationality;
+
+SELECT nationality, COUNT(author_id) AS c_authors
+FROM authors
+WHERE nationality IS NOT NULL
+GROUP BY nationality
+ORDER BY c_authors DESC, nationality;
+
+SELECT nationality, COUNT(author_id) AS c_authors
+FROM authors
+WHERE nationality IS NOT NULL
+AND nationality <> 'RUS'
+GROUP BY nationality
+ORDER BY c_authors DESC, nationality;
+
+SELECT nationality, COUNT(author_id) AS c_authors
+FROM authors
+WHERE nationality IS NOT NULL
+AND nationality NOT IN('RUS', 'ENG')
+GROUP BY nationality
+ORDER BY c_authors DESC, nationality;
+
+
+SELECT nationality, COUNT(author_id) AS c_authors
+FROM authors
+WHERE nationality IS NOT NULL
+AND nationality IN ('RUS', 'ENG')
+GROUP BY nationality
+ORDER BY c_authors DESC, nationality;

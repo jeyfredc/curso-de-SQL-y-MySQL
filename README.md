@@ -34,7 +34,7 @@
 
 [Clase 16 Tipos de JOIN](#Clase-16-Tipos-de-JOIN)
 
-[]()
+[Clase 17 5 casos de negocio](#Clase-17-5-casos-de-negocio)
 
 []()
 
@@ -2807,4 +2807,422 @@ FROM Table_A A
 FULL OUTER JOIN Table_B B
 ON A.Key = B.Key
 WHERE A.Key IS NULL OR B.Key IS NULL
+```
+
+## Clase 17 5 casos de negocio
+
+Se trata de ver como usar algunas preguntas que nos pueden hacer o nosotros mismos nos podemos hacer para resolver inquietudes 
+
+Aqui algunas preguntas que nos podriamos hacer para el ejercicio de libros
+
+1. ¿Qué nacionalidades hay?
+
+2. ¿Cuántos escritores hay de cada nacionalidad?
+
+3. ¿Cuántos libros hay de cada nacionalidad?
+
+4. ¿Cuál es el promedio/desviación standard del precio de libros?
+
+5. idem, pero por nacionalidad
+
+6. ¿Cuál es el precio máximo/minimo de un libro?
+
+7. ¿Cómo quedaría el reporte de préstamos? 
+
+Entonces empezamos resolviendo la primer pregunta
+
+1. ¿Qué nacionalidades hay?
+
+esta sentencia podria usarse de alguna forma pero no es la mas indicada para el ejercicio
+**SELECT nationality FROM authors;**, cada tupla trae un pais diferente y alli algunas se encuentra nulas 
+
+```
+mysql> SELECT nationality FROM authors;
++-------------+
+| nationality |
++-------------+
+| USA         |
+| COL         |
+| GBR         |
+| USA         |
+| MEX         |
+| SWE         |
+| USA         |
+| USA         |
+| USA         |
+| USA         |
+| USA         |
+| RUS         |
+| IND         |
+| USA         |
+| JAP         |
+| RUS         |
+| ESP         |
+| USA         |
+| FRA         |
+| USA         |
+| IND         |
+| AUT         |
+| USA         |
+| USA         |
+| ENG         |
+| DEU         |
+| NULL        |
+| AUS         |
+| USA         |
+| USA         |
+| USA         |
+| USA         |
+| IND         |
+| FRA         |
+| ENG         |
+| ENG         |
+| AUT         |
+| USA         |
+| USA         |
+| ENG         |
+| ENG         |
+| USA         |
+| RUS         |
+| USA         |
+| USA         |
+| USA         |
+| NULL        |
+| NULL        |
+| USA         |
+| NULL        |
+| NULL        |
+| NULL        |
+| USA         |
+| IND         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| RUS         |
+| USA         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| IND         |
+| NULL        |
+| ENG         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| FRA         |
+| NULL        |
+| NULL        |
+| USA         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| ENG         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| USA         |
+| NULL        |
+| NULL        |
+| IND         |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| NULL        |
+| ENG         |
+| ENG         |
+| SWE         |
+| NULL        |
+| ENG         |
++-------------+
+132 rows in set (0.00 sec)
+
+```
+
+es posible usar la palabra reservada **DISTINCT** para extraer los datos con mayor puntualidad 
+**SELECT DISTINCT nationality FROM authors;**, la sentencia incluso trae los datos nulos 
+
+```
+mysql> SELECT DISTINCT nationality FROM authors;
++-------------+
+| nationality |
++-------------+
+| USA         |
+| COL         |
+| GBR         |
+| MEX         |
+| SWE         |
+| RUS         |
+| IND         |
+| JAP         |
+| ESP         |
+| FRA         |
+| AUT         |
+| ENG         |
+| DEU         |
+| NULL        |
+| AUS         |
++-------------+
+15 rows in set (0.01 sec)
+
+```
+
+2. ¿Cuántos escritores hay de cada nacionalidad?
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> GROUP BY nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| USA         |        27 |
+| COL         |         1 |
+| GBR         |         1 |
+| MEX         |         1 |
+| SWE         |         2 |
+| RUS         |         4 |
+| IND         |         6 |
+| JAP         |         1 |
+| ESP         |         1 |
+| FRA         |         3 |
+| AUT         |         2 |
+| ENG         |        10 |
+| DEU         |         1 |
+| NULL        |        71 |
+| AUS         |         1 |
++-------------+-----------+
+15 rows in set (0.00 sec)
+
+```
+tambien se puede ordenar de manera descendiente 
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| NULL        |        71 |
+| USA         |        27 |
+| ENG         |        10 |
+| IND         |         6 |
+| RUS         |         4 |
+| FRA         |         3 |
+| SWE         |         2 |
+| AUT         |         2 |
+| COL         |         1 |
+| GBR         |         1 |
+| MEX         |         1 |
+| JAP         |         1 |
+| ESP         |         1 |
+| DEU         |         1 |
+| AUS         |         1 |
++-------------+-----------+
+15 rows in set (0.00 sec)
+```
+
+con **ORDER BY** se puede ordenar todas las columnas que existan y se leen de izquierda a derecha segun la instruccion que se coloque, es decir lo primero que va a ordernar en este caso es a la cantidad de autores y luego los nombres de cada pais
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality ASC;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| NULL        |        71 |
+| USA         |        27 |
+| ENG         |        10 |
+| IND         |         6 |
+| RUS         |         4 |
+| FRA         |         3 |
+| AUT         |         2 |
+| SWE         |         2 |
+| AUS         |         1 |
+| COL         |         1 |
+| DEU         |         1 |
+| ESP         |         1 |
+| GBR         |         1 |
+| JAP         |         1 |
+| MEX         |         1 |
++-------------+-----------+
+15 rows in set (0.00 sec)
+
+```
+
+ahora lo que se va a hacer es no traer la informacion de los que son NULL, que como la consulta lo indica son 71
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> WHERE nationality IS NOT NULL
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| USA         |        27 |
+| ENG         |        10 |
+| IND         |         6 |
+| RUS         |         4 |
+| FRA         |         3 |
+| AUT         |         2 |
+| SWE         |         2 |
+| AUS         |         1 |
+| COL         |         1 |
+| DEU         |         1 |
+| ESP         |         1 |
+| GBR         |         1 |
+| JAP         |         1 |
+| MEX         |         1 |
++-------------+-----------+
+14 rows in set (0.02 sec)
+
+```
+
+si se quiere quitar otro pais como por ejemplo rusia 'RUS' se pueden usar 2 sentencias **"<>"** o **NOT IN()**
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> WHERE nationality IS NOT NULL
+    -> AND nationality <> 'RUS'
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| USA         |        27 |
+| ENG         |        10 |
+| IND         |         6 |
+| FRA         |         3 |
+| AUT         |         2 |
+| SWE         |         2 |
+| AUS         |         1 |
+| COL         |         1 |
+| DEU         |         1 |
+| ESP         |         1 |
+| GBR         |         1 |
+| JAP         |         1 |
+| MEX         |         1 |
++-------------+-----------+
+13 rows in set (0.01 sec)
+
+mysql> 
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> WHERE nationality IS NOT NULL
+    -> AND nationality NOT IN('RUS')
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| USA         |        27 |
+| ENG         |        10 |
+| IND         |         6 |
+| FRA         |         3 |
+| AUT         |         2 |
+| SWE         |         2 |
+| AUS         |         1 |
+| COL         |         1 |
+| DEU         |         1 |
+| ESP         |         1 |
+| GBR         |         1 |
+| JAP         |         1 |
+| MEX         |         1 |
++-------------+-----------+
+13 rows in set (0.09 sec)
+
+```
+
+y si se quiere agregar o rechazar otro pais se agrega con una **","**
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> WHERE nationality IS NOT NULL
+    -> AND nationality NOT IN('RUS', 'ENG')
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| USA         |        27 |
+| IND         |         6 |
+| FRA         |         3 |
+| AUT         |         2 |
+| SWE         |         2 |
+| AUS         |         1 |
+| COL         |         1 |
+| DEU         |         1 |
+| ESP         |         1 |
+| GBR         |         1 |
+| JAP         |         1 |
+| MEX         |         1 |
++-------------+-----------+
+12 rows in set (0.09 sec)
+
+```
+
+y si solo se quiere traer a rusia e inglaterra 'RUS' 'ENG', se quita **NOT**
+
+```
+mysql> SELECT nationality, COUNT(author_id) AS c_authors
+    -> FROM authors
+    -> WHERE nationality IS NOT NULL
+    -> AND nationality IN ('RUS', 'ENG')
+    -> GROUP BY nationality
+    -> ORDER BY c_authors DESC, nationality;
++-------------+-----------+
+| nationality | c_authors |
++-------------+-----------+
+| ENG         |        10 |
+| RUS         |         4 |
++-------------+-----------+
+2 rows in set (0.01 sec)
+
 ```
