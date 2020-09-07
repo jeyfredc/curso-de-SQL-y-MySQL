@@ -30,7 +30,7 @@
 
 [Clase 14 Comando JOIN](#Clase-14-Comando-JOIN)
 
-[]()
+[Clase 15 Left JOIN](#Clase-15-Left-JOIN)
 
 []()
 
@@ -2269,4 +2269,421 @@ mysql> SELECT c.name AS client, b.title , a.name AS author, t.type
 | Rafael Galvez       | The Startup Playbook             | Sam Altman         | sell |
 +---------------------+----------------------------------+--------------------+------+
 3 rows in set (0.00 sec)
+```
+
+## Clase 15 Left JOIN
+
+A continuacion se traen los libros y autor que existe por cada libro donde se hace un tipo de **JOIN** implicito, en el primer ejemplo se trae toda la informacion de la base de datos. En el segundo ejemplo se traen tan solo 10 dato condicionando con limites, pero tambien existe el JOIN explicito, el cual se trabajo durante la clase anterior y esta propiamente trae los nombres **INNER JOIN** y **JOIN** los cuales son la misma sentencia y traen la misma informacion que el JOIN implicito que se vera en el tercer ejemplo
+
+**Ejemplo 1**
+
+```
+mysql> SELECT b.title, a.name
+    -> FROM authors AS a, books AS b
+    -> WHERE a.author_id = b.author_id;
++--------------------------------------------------------+-----------------------+
+| title                                                  | name                  |
++--------------------------------------------------------+-----------------------+
+| The Startup Playbook                                   | Sam Altman            |
+| The Startup Playbook                                   | Sam Altman            |
+| Estudio en escarlata                                   | Arthur Conan Doyle    |
+| Wallander: Asesinos sin rostro                         | Henning Mankel        |
+| Wallander: Los perros de Riga                          | Henning Mankel        |
+| Wallander: La leona blanca                             | Henning Mankel        |
+| Wallander: El hombre sonriente                         | Henning Mankel        |
+| Wallander: La falsa pista                              | Henning Mankel        |
+| Wallander: La quinta mujer                             | Henning Mankel        |
+| Wallander: Pisando los talones                         | Henning Mankel        |
+| Wallander: Cortafuegos                                 | Henning Mankel        |
+| El llano en llamas                                     | Juan Rulfo            |
+| Fundamentals of Wavelets                               | Jaideva Goswami       |
+| Data Smart                                             | John Foreman          |
+| God Created the Integers                               | Stephen Hawking       |
+| Superfreakonomics                                      | Stephen Dubner        |
+| Orientalism                                            | Edward Said           |
+| The Nature of Statistical Learning Theory              | Vladimir Vapnik       |
+| Integration of the Indian States                       | V P Menon             |
+| The Drunkard's Walk                                    | Leonard Mlodinow      |
+| Image Processing & Mathematical Morphology             | Frank Shih            |
+| How to Think Like Sherlock Holmes                      | Maria Konnikova       |
+| Data Scientists at Work                                | Sebastian Gutierrez   |
+| Slaughterhouse Five                                    | Kurt Vonnegut         |
+| Birth of a Theorem                                     | Cedric Villani        |
+| Structure & Interpretation of Computer Programs        | Gerald Sussman        |
+| The Age of Wrath                                       | Abraham Eraly         |
+| The Trial                                              | Frank Kafka           |
+| Statistical Decision Theory                            | John Pratt            |
+| Data Mining Handbook                                   | Robert Nisbet         |
+| The New Machiavelli                                    | H. G. Wells           |
+| Physics & Philosophy                                   | Werner Heisenberg     |
+| Making Software                                        | Andy Oram             |
+| Vol I Analysis                                         | Terence Tao           |
+| Machine Learning for Hackers                           | Drew Conway           |
+| The Signal and the Noise                               | Nate Silver           |
+| Python for Data Analysis                               | Wes McKinney          |
+| Introduction to Algorithms                             | Thomas Cormen         |
+| The Beautiful and the Damned                           | Siddhartha Deb        |
+| The Outsider                                           | Albert Camus          |
+| The - Vol I Complete Sherlock Holmes                   | Arthur Conan Doyle    |
+| The - Vol II Complete Sherlock Holmes                  | Arthur Conan Doyle    |
+| The Wealth of Nations                                  | Adam Smith            |
+| The Pillars of the Earth                               | Ken Follett           |
+| The Tao of Physics                                     | Fritjof Capra         |
+| Surely You's re Joking Mr Feynman                      | Richard Feynman       |
+| A Farewell to Arms                                     | Ernest Hemingway      |
+| The Veteran                                            | Frederick Forsyth     |
+| False Impressions                                      | Jeffery Archer        |
+| The Last Lecture                                       | Randy Pausch          |
+| Return of the Primitive                                | Ayn Rand              |
+| Jurassic Park                                          | Michael Crichton      |
+| A Russian Journal                                      | John Steinbeck        |
+| Tales of Mystery and Imagination                       | Edgar Allen Poe       |
+| Freakonomics                                           | Stephen Dubner        |
+| The Hidden Connections                                 | Fritjof Capra         |
+| The Story of Philosophy                                | Will Durant           |
+| Asami Asami                                            | P L Deshpande         |
+| Journal of a Novel                                     | John Steinbeck        |
+| Once There Was a War                                   | John Steinbeck        |
+| The Moon is Down                                       | John Steinbeck        |
+| The Brethren                                           | John Grisham          |
+| In a Free State                                        | V. S. Naipaul         |
+| Catch 22                                               | Joseph Heller         |
+| The Complete Mastermind                                | BBC                   |
+| Dylan on Dylan                                         | Bob Dylan             |
+| Soft Computing & Intelligent Systems                   | Madan Gupta           |
+| Textbook of Economic Theory                            | Alfred Stonier        |
+| Econometric Analysis                                   | W. H. Greene          |
+| Learning OpenCV                                        | Gary Bradsky          |
+| Data Structures Using C & C++                          | Andrew Tanenbaum      |
+| A Modern Approach Computer Vision                      | David Forsyth         |
+| Principles of Communication Systems                    | Schilling Taub        |
+| Let Us C                                               | Yashwant Kanetkar     |
+| The Amulet of Samarkand                                | Jonathan Stroud       |
+| Crime and Punishment                                   | Fyodor Dostoevsky     |
+| Angels & Demons                                        | Dan Brown             |
+| The Argumentative Indian                               | Amartya Sen           |
+| Sea of Poppies                                         | Amitav Ghosh          |
+| The Idea of Justice                                    | Amartya Sen           |
+| A Raisin in the Sun                                    | Lorraine Hansberry    |
+| All the President's Men                                | Bob Woodward          |
+| A Prisoner of Birth                                    | Jeffery Archer        |
+| Scoop!                                                 | Kuldip Nayar          |
+| Ahe Manohar Tari                                       | Sunita Deshpande      |
+| The Last Mughal                                        | William Dalrymple     |
+| Vol 39 No. 1 Social Choice & Welfare                   | Various               |
+| Radiowaril Bhashane & Shrutika                         | P L Deshpande         |
+| Gun Gayin Awadi                                        | P L Deshpande         |
+| Aghal Paghal                                           | P L Deshpande         |
+| Maqta-e-Ghalib                                         | Sanjay Garg           |
+| Manasa                                                 | V P Kale              |
+| India from Midnight to Milennium                       | Shashi Tharoor        |
+| The Great Indian Novel                                 | Shashi Tharoor        |
+| O Jerusalem!                                           | Dominique Lapierre    |
+| The City of Joy                                        | Dominique Lapierre    |
+| Freedom at Midnight                                    | Dominique Lapierre    |
+| The Winter of Our Discontent                           | John Steinbeck        |
+| On Education                                           | Bertrand Russell      |
+| Free Will                                              | Sam Harris            |
+| Bookless in Baghdad                                    | Shashi Tharoor        |
+| The Case of the Lame Canary                            | Earle Stanley Gardner |
+| The Theory of Everything                               | Stephen Hawking       |
+| New Markets & Other Essays                             | Peter Drucker         |
+| Electric Universe                                      | David Bodanis         |
+| The Hunchback of Notre Dame                            | Victor Hugo           |
+| Burning Bright                                         | John Steinbeck        |
+| The Age of Discontuinity                               | Peter Drucker         |
+| Doctor in the Nude                                     | Richard Gordon        |
+| Down and Out in Paris & London                         | George Orwell         |
+| Identity & Violence                                    | Amartya Sen           |
+| Beyond the Three Seas                                  | William Dalrymple     |
+| Talking Straight                                       | Lee Iacoca            |
+| Vol 3 Maugham's Collected Short Stories                | William S Maugham     |
+| The Phantom of Manhattan                               | Frederick Forsyth     |
+| Ashenden of The British Agent                          | William S Maugham     |
+| Zen & The Art of Motorcycle Maintenance                | Robert Pirsig         |
+| The Great War for Civilization                         | Robert Fisk           |
+| We the Living                                          | Ayn Rand              |
+| The Artist and the Mathematician                       | Amir Aczel            |
+| History of Western Philosophy                          | Bertrand Russell      |
+| Rationality & Freedom                                  | Amartya Sen           |
+| Clash of Civilizations and Remaking of the World Order | Samuel Huntington     |
+| Uncommon Wisdom                                        | Fritjof Capra         |
+| One                                                    | Richard Bach          |
+| To Sir With Love                                       | Braithwaite           |
+| Half A Life                                            | V S Naipaul           |
+| The Discovery of India                                 | Jawaharlal Nehru      |
+| Apulki                                                 | P L Deshpande         |
+| Unpopular Essays                                       | Bertrand Russell      |
+| The Deceiver                                           | Frederick Forsyth     |
+| Veil: Secret Wars of the CIA                           | Bob Woodward          |
+| Char Shabda                                            | P L Deshpande         |
+| Rosy is My Relative                                    | Gerald Durrell        |
+| The Moon and Sixpence                                  | William S Maugham     |
+| The Trembling of a Leaf                                | William S Maugham     |
+| Doctor on the Brain                                    | Richard Gordon        |
+| Simpsons & Their Mathematical Secrets                  | Simon Singh           |
+| Pattern Classification                                 | Hart Duda             |
+| From Beirut to Jerusalem                               | Thomas Friedman       |
+| The Code Book                                          | Simon Singh           |
+| The Age of the Warrior                                 | Robert Fisk           |
+| The Numbers Behind Numb3rs                             | Keith Devlin          |
+| A Life in Letters                                      | John Steinbeck        |
+| The Information                                        | James Gleick          |
+| Elements of Information Theory                         | Joy Thomas            |
+| Power Electronics - Rashid                             | Muhammad Rashid       |
+| Power Electronics - Mohan                              | Ned Mohan             |
+| Neural Networks                                        | Simon Haykin          |
+| The Grapes of Wrath                                    | John Steinbeck        |
+| Vyakti ani Valli                                       | P L Deshpande         |
+| Statistical Learning Theory                            | Vladimir Vapnik       |
+| Empire of the Mughal - The Tainted Throne              | Alex Rutherford       |
+| Empire of the Mughal - Brothers at War                 | Alex Rutherford       |
+| Empire of the Mughal - Ruler of the World              | Alex Rutherford       |
+| Empire of the Mughal - The Serpent's Tooth             | Alex Rutherford       |
+| Empire of the Mughal - Raiders from the North          | Alex Rutherford       |
+| Mossad                                                 | Michael Baz-Zohar     |
+| Jim Corbett Omnibus                                    | Jim Corbett           |
+| 20000 Leagues Under the Sea                            | Jules Verne           |
+| Batatyachi Chal                                        | Deshpande P L         |
+| Hafasavnuk                                             | Deshpande P L         |
+| Urlasurla                                              | Deshpande P L         |
+| Pointers in C                                          | Yashwant Kanetkar     |
+| The Cathedral and the Bazaar                           | Eric Raymond          |
+| Design with OpAmps                                     | Sergio Franco         |
+| Think Complexity                                       | Allen Downey          |
+| The Devil's Advocate                                   | Morris West           |
+| Ayn Rand Answers                                       | Ayn Rand              |
+| Philosophy: Who Needs It                               | Ayn Rand              |
+| Data Analysis with Open Source Tools                   | Phillip Janert        |
+| Broca's Brain                                          | Carl Sagan            |
+| Men of Mathematics                                     | E T Bell              |
+| Oxford book of Modern Science Writing                  | Richard Dawkins       |
+| Judiciary and Democracy Justice                        | Sudhanshu Ranjan      |
+| The Arthashastra                                       | Kautiyla              |
+| We the People                                          | Palkhivala            |
+| We the Nation                                          | Palkhivala            |
+| The Courtroom Genius                                   | Sorabjee              |
+| Dongri to Dubai                                        | Hussain Zaidi         |
+| Foundation History of England                          | Peter Ackroyd         |
+| City of Djinns                                         | William Dalrymple     |
+| India's Legal System                                   | Nariman               |
+| More Tears to Cry                                      | Jean Sassoon          |
+| The Ropemaker                                          | Peter Dickinson       |
+| The Prince                                             | Machiavelli           |
+| Eyeless in Gaza                                        | Aldous Huxley         |
+| Tales of Beedle the Bard                               | J K Rowling           |
+| Girl with the Dragon Tattoo                            | Steig Larsson         |
+| Girl who kicked the Hornet's Nest                      | Steig Larsson         |
+| Girl who played with Fire                              | Steig Larsson         |
+| Structure and Randomness                               | Terence Tao           |
+| Image Processing with MATLAB                           | Steve Eddins          |
+| Animal Farm                                            | George Orwell         |
+| The Idiot                                              | Fyodor Dostoevsky     |
+| A Christmas Carol                                      | Charles Dickens       |
++--------------------------------------------------------+-----------------------+
+196 rows in set (0.00 sec)
+```
+
+**Ejemplo 2**
+
+Ahora solo se traeran 10 datos
+
+```
+mysql> SELECT b.title, a.name
+    -> FROM authors AS a, books AS b
+    -> WHERE a.author_id = b.author_id
+    -> LIMIT 10;
++--------------------------------+--------------------+
+| title                          | name               |
++--------------------------------+--------------------+
+| The Startup Playbook           | Sam Altman         |
+| The Startup Playbook           | Sam Altman         |
+| Estudio en escarlata           | Arthur Conan Doyle |
+| Wallander: Asesinos sin rostro | Henning Mankel     |
+| Wallander: Los perros de Riga  | Henning Mankel     |
+| Wallander: La leona blanca     | Henning Mankel     |
+| Wallander: El hombre sonriente | Henning Mankel     |
+| Wallander: La falsa pista      | Henning Mankel     |
+| Wallander: La quinta mujer     | Henning Mankel     |
+| Wallander: Pisando los talones | Henning Mankel     |
++------------------------
+```
+
+
+**Ejemplo 3**
+
+se traen los mismos 10 datos de la anterior tabla pero con **INNER JOIN** y **JOIN**
+
+```
+mysql> SELECT b.title, a.name
+    -> FROM books AS b
+    -> INNER JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> LIMIT 10;
++--------------------------------+--------------------+
+| title                          | name               |
++--------------------------------+--------------------+
+| The Startup Playbook           | Sam Altman         |
+| The Startup Playbook           | Sam Altman         |
+| Estudio en escarlata           | Arthur Conan Doyle |
+| Wallander: Asesinos sin rostro | Henning Mankel     |
+| Wallander: Los perros de Riga  | Henning Mankel     |
+| Wallander: La leona blanca     | Henning Mankel     |
+| Wallander: El hombre sonriente | Henning Mankel     |
+| Wallander: La falsa pista      | Henning Mankel     |
+| Wallander: La quinta mujer     | Henning Mankel     |
+| Wallander: Pisando los talones | Henning Mankel     |
++--------------------------------+--------------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT b.title, a.name FROM books AS b JOIN authors AS a ON a.author_id = b.author_id LIMIT 10;
++--------------------------------+--------------------+
+| title                          | name               |
++--------------------------------+--------------------+
+| The Startup Playbook           | Sam Altman         |
+| The Startup Playbook           | Sam Altman         |
+| Estudio en escarlata           | Arthur Conan Doyle |
+| Wallander: Asesinos sin rostro | Henning Mankel     |
+| Wallander: Los perros de Riga  | Henning Mankel     |
+| Wallander: La leona blanca     | Henning Mankel     |
+| Wallander: El hombre sonriente | Henning Mankel     |
+| Wallander: La falsa pista      | Henning Mankel     |
+| Wallander: La quinta mujer     | Henning Mankel     |
+| Wallander: Pisando los talones | Henning Mankel     |
++--------------------------------+--------------------+
+10 rows in set (0.00 sec)
+
+```
+
+Existe diferencias entre usar un **INNER JOIN o JOIN** y **LEFT JOIN**, en el primer caso trae los datos que entre autores y libros comparten entre si en este caso sin ningun orden en especifico 
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, b.title FROM authors AS a JOIN books AS b ON b.author_id = a.author_id WHERE a.author_id BETWEEN 1 AND 5;
++-----------+--------------------+-------------+---------------------------------------+
+| author_id | name               | nationality | title                                 |
++-----------+--------------------+-------------+---------------------------------------+
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         3 | Arthur Conan Doyle | GBR         | Estudio en escarlata                  |
+|         5 | Juan Rulfo         | MEX         | El llano en llamas                    |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol I Complete Sherlock Holmes  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol II Complete Sherlock Holmes |
++-----------+--------------------+-------------+---------------------------------------+
+6 rows in set (0.00 sec)
+
+```
+
+con el decorador **ORDER BY** se puede ordenar la columna de menor a mayor, pero por defecto esta viene en orden ascendente y no se indica, si se quisiera indicar se puede colocar la sentencia **ASC** o **DESC**
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, b.title
+    -> FROM authors AS a
+    -> JOIN books AS b
+    -> ON b.author_id = a.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5
+    -> ORDER BY a.author_id;
++-----------+--------------------+-------------+---------------------------------------+
+| author_id | name               | nationality | title                                 |
++-----------+--------------------+-------------+---------------------------------------+
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         3 | Arthur Conan Doyle | GBR         | Estudio en escarlata                  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol I Complete Sherlock Holmes  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol II Complete Sherlock Holmes |
+|         5 | Juan Rulfo         | MEX         | El llano en llamas                    |
++-----------+--------------------+-------------+---------------------------------------+
+6 rows in set (0.00 sec)
+```
+
+En esta se indica que va de forma ascendente por nombre de autor
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, b.title
+    -> FROM authors AS a
+    -> JOIN books AS b
+    -> ON b.author_id = a.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5
+    -> ORDER BY a.name ASC;
++-----------+--------------------+-------------+---------------------------------------+
+| author_id | name               | nationality | title                                 |
++-----------+--------------------+-------------+---------------------------------------+
+|         3 | Arthur Conan Doyle | GBR         | Estudio en escarlata                  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol I Complete Sherlock Holmes  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol II Complete Sherlock Holmes |
+|         5 | Juan Rulfo         | MEX         | El llano en llamas                    |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
++-----------+--------------------+-------------+---------------------------------------+
+6 rows in set (0.00 sec)
+```
+
+y como se habia visto antes el autor No. 4 no tiene asignado ningun libro por tanto no aparece en la tabla, para incluirlo se debe usar **LEFT JOIN**, a parte se va a establecer que vaya en forma descendente por numero de id de autor, y tambien se ve que aparece Freddy Vega sin libro, en este caso fue util saber que dos de los primeros 5 autores no escribieron algun libro o simplemente no continen informacion
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, b.title
+    -> FROM authors AS a
+    -> LEFT JOIN books AS b
+    -> ON b.author_id = a.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5
+    -> ORDER BY a.author_id DESC;
++-----------+--------------------+-------------+---------------------------------------+
+| author_id | name               | nationality | title                                 |
++-----------+--------------------+-------------+---------------------------------------+
+|         5 | Juan Rulfo         | MEX         | El llano en llamas                    |
+|         4 | Chuck Palahniuk    | USA         | NULL                                  |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol II Complete Sherlock Holmes |
+|         3 | Arthur Conan Doyle | GBR         | The - Vol I Complete Sherlock Holmes  |
+|         3 | Arthur Conan Doyle | GBR         | Estudio en escarlata                  |
+|         2 | Freddy Vega        | COL         | NULL                                  |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
+|         1 | Sam Altman         | USA         | The Startup Playbook                  |
++-----------+--------------------+-------------+---------------------------------------+
+8 rows in set (0.01 sec)
+
+```
+
+Existe otra sentencia para agrupar datos **GROUP BY** , por ejemplo esta es util para agrupar y contar con la funcion **COUNT** cuantos libros escribio cada autor.
+
+**Ejemplo**
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+    -> FROM authors AS a
+    -> LEFT JOIN books AS b
+    -> ON b.author_id = a.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5
+    -> GROUP BY a.author_id
+    -> ORDER BY a.author_id;
++-----------+--------------------+-------------+------------------+
+| author_id | name               | nationality | COUNT(b.book_id) |
++-----------+--------------------+-------------+------------------+
+|         1 | Sam Altman         | USA         |                2 |
+|         2 | Freddy Vega        | COL         |                0 |
+|         3 | Arthur Conan Doyle | GBR         |                3 |
+|         4 | Chuck Palahniuk    | USA         |                0 |
+|         5 | Juan Rulfo         | MEX         |                1 |
++-----------+--------------------+-------------+------------------+
+5 rows in set (0.04 sec)
+
+```
+
+utilizando **INNER JOIN** solo va a mostrar los datos que estan completos y no nulos
+
+```
+mysql> SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+    -> FROM authors AS a
+    -> INNER JOIN books AS b
+    -> ON b.author_id = a.author_id
+    -> WHERE a.author_id BETWEEN 1 AND 5
+    -> GROUP BY a.author_id
+    -> ORDER BY a.author_id;
++-----------+--------------------+-------------+------------------+
+| author_id | name               | nationality | COUNT(b.book_id) |
++-----------+--------------------+-------------+------------------+
+|         1 | Sam Altman         | USA         |                2 |
+|         3 | Arthur Conan Doyle | GBR         |                3 |
+|         5 | Juan Rulfo         | MEX         |                1 |
++-----------+--------------------+-------------+------------------+
+3 rows in set (0.00 sec)
+
 ```

@@ -172,3 +172,70 @@ JOIN authors AS a
 ON b.author_id = a.author_id
 WHERE c.gender = 'M'
 AND t.TYPE IN ('sell', 'lend');
+
+
+-- Traer todos los libros y el nombre del autor utilizando JOIN implicito
+ 
+SELECT b.title, a.name
+FROM authors AS a, books AS b
+WHERE a.author_id = b.author_id;
+
+-- Traer 10 los libros y el nombre del autor utilizando JOIN implicito
+
+SELECT b.title, a.name
+FROM authors AS a, books AS b
+WHERE a.author_id = b.author_id
+LIMIT 10;
+
+-- Traer 10 los libros y el nombre del autor utilizando JOIN explicito
+
+SELECT b.title, a.name
+FROM books AS b
+INNER JOIN authors AS a
+ON a.author_id = b.author_id
+LIMIT 10;
+
+-- Traer id, nombre, nacionalidad y libro de los primeros 5 autores con JOIN explicito
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors AS a
+JOIN books AS b
+ON b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+ORDER BY a.author_id;
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors AS a
+JOIN books AS b
+ON b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+ORDER BY a.name ASC;
+
+-- Traer id, nombre, nacionalidad y libro de los primeros 5 autores con LEFT JOIN explicito
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors AS a
+LEFT JOIN books AS b
+ON b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+ORDER BY a.author_id DESC;
+
+-- Agrupando y utilizando la sentencia GROUP BY con LEFT JOIN
+
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+FROM authors AS a
+LEFT JOIN books AS b
+ON b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+GROUP BY a.author_id
+ORDER BY a.author_id;
+
+-- Agrupando y utilizando la sentencia GROUP BY con INNER JOIN
+
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+FROM authors AS a
+INNER JOIN books AS b
+ON b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+GROUP BY a.author_id
+ORDER BY a.author_id;
