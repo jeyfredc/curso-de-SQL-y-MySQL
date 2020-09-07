@@ -69,3 +69,15 @@ INSERT INTO clients(client_id, name,email, birthdate,gender, active) VALUES
 INSERT INTO clients(name, email, birthdate,gender, active) VALUES 
 ('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 0)
 ON DUPLICATE KEY UPDATE active = VALUES(active);
+
+-- Crear libro
+-- El laberinto de la Soledad, Octavio Paz, 1900
+
+INSERT INTO books(title, author_id) VALUES
+('El laberinto de la Soledad', 6);
+
+-- Crear libro
+-- Vuelta al laberinto de la Soledad, Octavio Paz, 1960
+
+INSERT INTO books(title, author_id, `year`) VALUES
+('Vuelta al laberinto de la Soledad', (SELECT author_id FROM authors WHERE name = 'Octavio Paz' LIMIT 1),1960);

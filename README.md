@@ -22,7 +22,7 @@
 
 [Clase 10 Comando on duplicate key](#Clase-10-Comando-on-duplicate-key)
 
-[]()
+[Clase 11 Inserción de datos usando queries anidados](#Clase-11-Inserción-de-datos-usando-queries-anidados)
 
 []()
 
@@ -854,3 +854,90 @@ mysql>
 ```
 
 y como se observa **maria Dolores** queda inactiva en la tabla
+
+## Clase 11 Inserción de datos usando queries anidados
+
+En esta clase se van a insertar 2 libros con el mismo autor, el cual sera **Octavio Paz**, el cual le corresponde el id es el **numero 6**. 
+
+Lo primero que se hace es consultar la base de autores
+
+```
+mysql> select * from authors;
++-----------+------------------------+-------------+
+| author_id | name                   | nationality |
++-----------+------------------------+-------------+
+|         1 | Juan Rulfo             | MEX         |
+|         2 | Gabriel Garcia Marquez | COL         |
+|         3 | Juan Gabriel Vazquez   | COL         |
+|         4 | Julio Cortazar         | ARG         |
+|         5 | Isabel Allende         | CHI         |
+|         6 | Octavio Paz            | MEX         |
+|         7 | Juan Carlos Onetti     | URU         |
+|        16 | Pablo Neruda           | NULL        |
++-----------+------------------------+-------------+
+8 rows in set (0.00 sec)
+
+```
+
+el libro a introducir en principio es el siguiente
+
+```
+-- Crear libro
+-- El laberinto de la Soledad, Octavio Paz, 1900
+```
+Esto se puede hacer porque se esta trabajando con normalizacion y se requiere cruzar informacion de libros con autores 
+
+Existe otra forma de validar que un autor exista con la siguiente sentencia y aqui se esta confirmando nuevamente el valor de su id
+
+```
+mysql> select * from authors where name = 'Octavio Paz'
+    -> ;
++-----------+-------------+-------------+
+| author_id | name        | nationality |
++-----------+-------------+-------------+
+|         6 | Octavio Paz | MEX         |
++-----------+-------------+-------------+
+1 row in set (0.00 sec)
+
+```
+Y ahora a continuacion se insertan los siguientes datos, y asi es como queda creado el primer libro en la tabla de **books**
+
+```
+mysql> INSERT INTO books(title, author_id) VALUES
+    -> ('El laberinto de la Soledad', 6);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from books;
++---------+-----------+----------------------------+------+----------+-----------+-------+----------+--------+-------------+
+| book_id | author_id | title                      | year | language | cover_url | price | sellable | copies | description |
++---------+-----------+----------------------------+------+----------+-----------+-------+----------+--------+-------------+
+|       1 |         6 | El laberinto de la Soledad | 1900 | es       | NULL      | 10.00 |        1 |      1 | NULL        |
++---------+-----------+----------------------------+------+----------+-----------+-------+----------+--------+-------------+
+1 row in set (0.00 sec)
+```
+
+**Quedo creado el año 1900 porque es la fecha que se configuro por defecto en la tabla cuando se creo**
+
+Ahora viene la creacion del segundo libro, donde se usara queries anidados
+
+```
+-- Crear libro
+-- Vuelta al laberinto de la Soledad, Octavio Paz, 1960
+```
+Se ejecuta la siguiente sentencia donde ya se espicifica el año, y aqui la forma de insertar al libro y autor es distinta porque no se esta buscando por su id si no que se esta utilizando entre parentesis otra sentencia para realizar la busqueda del autor **un subquerie**, la sentencia **LIMIT**, refiere a que solo haga la busqueda de maximo una referencia
+
+```
+mysql> INSERT INTO books(title, author_id, `year`) VALUES
+    -> ('Vuelta al laberinto de la Soledad', (SELECT author_id FROM authors WHERE name = 'Octavio Paz' LIMIT 1),1960);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from books;
++---------+-----------+-----------------------------------+------+----------+-----------+-------+----------+--------+-------------+
+| book_id | author_id | title                             | year | language | cover_url | price | sellable | copies | description |
++---------+-----------+-----------------------------------+------+----------+-----------+-------+----------+--------+-------------+
+|       1 |         6 | El laberinto de la Soledad        | 1900 | es       | NULL      | 10.00 |        1 |      1 | NULL        |
+|       2 |         6 | Vuelta al laberinto de la Soledad | 1960 | es       | NULL      | 10.00 |        1 |      1 | NULL        |
++---------+-----------+-----------------------------------+------+----------+-----------+-------+----------+--------+-------------+
+2 rows in set (0.00 sec)
+
+```
