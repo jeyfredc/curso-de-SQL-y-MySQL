@@ -81,3 +81,16 @@ INSERT INTO books(title, author_id) VALUES
 
 INSERT INTO books(title, author_id, `year`) VALUES
 ('Vuelta al laberinto de la Soledad', (SELECT author_id FROM authors WHERE name = 'Octavio Paz' LIMIT 1),1960);
+
+-- sentencia para ejecutar en la base de datos de pruebaplatzi que traiga y busque nombre, email, año de nacimiento y genero de todas las personas que en su apellido tengan la palbra Dolor
+
+SELECT name, email, YEAR(NOW()) - YEAR(birthdate), gender
+FROM clients
+WHERE name LIKE '%Dolor%';
+
+-- sentencia para ejecutar en la base de datos de pruebaplatzi que traiga y busque nombre, email, año de nacimiento y genero de todas las personas que en su apellido tengan la palbra Lop
+
+SELECT name, email, YEAR(NOW()) - YEAR(birthdate) AS Edad_Actual, gender
+FROM clients
+WHERE gender = 'F'
+AND `name` LIKE '%Lop%';
