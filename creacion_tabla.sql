@@ -1,3 +1,4 @@
+-- Crear tabla de libros
 CREATE TABLE IF NOT EXISTS books (
     book_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
     author_id INTEGER UNSIGNED,
@@ -10,13 +11,13 @@ CREATE TABLE IF NOT EXISTS books (
     copies INTEGER NOT NULL DEFAULT 1,
     `description` TEXT
 );
-
+-- Crear tabla de autores
 CREATE TABLE IF NOT EXISTS authors(
     author_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     nationality VARCHAR(3)
 );
-
+-- Crear tabla de clientes 
 CREATE TABLE clients (
     client_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
@@ -27,7 +28,7 @@ CREATE TABLE clients (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
+-- Crear tabla de operaciones
 CREATE TABLE IF NOT EXISTS operations(
     operation_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     book_id INTEGER UNSIGNED,
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS operations(
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     finished TINYINT(1) NOT NULL DEFAULT 0
 );
-
+-- Insertar autores
 INSERT INTO authors(author_id, name, nationality)
 VALUES (1, 'Juan Rulfo', 'MEX');
 
@@ -55,3 +56,16 @@ VALUES('Julio Cortazar', 'ARG'),
 
 INSERT INTO authors(author_id, name)
 VALUES (16, 'Pablo Neruda');
+
+-- insertar clientes
+
+INSERT INTO clients(client_id, name,email, birthdate,gender, active) VALUES
+(1, 'Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 1),
+(2, 'Adrian Fernandez', 'Adrian.55818851J@random.names', '1970-04-09', 'M', 1),
+(3, 'Maria Luisa marin', 'Maria Luisa.83726282A@random.names', '1957-07-30', 'F', 1),
+(4, 'Pedro Sanchez', 'Pedro.78522059J@random.names', '1992-01-31', 'M', 1);
+
+-- Pasando uno de los clientes de activo a inactivo
+INSERT INTO clients(name, email, birthdate,gender, active) VALUES 
+('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 0)
+ON DUPLICATE KEY UPDATE active = VALUES(active);

@@ -20,7 +20,7 @@
 
 [Clase 9 Comando INSERT](#Clase-9-Comando-INSERT)
 
-[]()
+[Clase 10 Comando on duplicate key](#Clase-10-Comando-on-duplicate-key)
 
 []()
 
@@ -745,3 +745,112 @@ mysql> select * from authors;
     8 rows in set (0.00 sec)
     
     ```
+
+## Clase 10 Comando on duplicate key
+
+En esta clase se realiza la creacion de la tabla de clientes, con las siguientes sentencias:
+
+```
+INSERT INTO clients(client_id, name,email, birthdate,gender, active) VALUES
+(1, 'Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 1),
+(2, 'Adrian Fernandez', 'Adrian.55818851J@random.names', '1970-04-09', 'M', 1),
+(3, 'Maria Luisa marin', 'Maria Luisa.83726282A@random.names', '1957-07-30', 'F', 1),
+(4, 'Pedro Sanchez', 'Pedro.78522059J@random.names', '1992-01-31', 'M', 1);
+```
+
+la tabla queda creada en base 
+
+```
+mysql> INSERT INTO clients(client_id, name,email, birthdate,gender, active) VALUES
+    -> (1, 'Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 1),
+    -> (2, 'Adrian Fernandez', 'Adrian.55818851J@random.names', '1970-04-09', 'M', 1),
+    -> (3, 'Maria Luisa marin', 'Maria Luisa.83726282A@random.names', '1957-07-30', 'F', 1),
+    -> (4, 'Pedro Sanchez', 'Pedro.78522059J@random.names', '1992-01-31', 'M', 1);
+Query OK, 4 rows affected (0.78 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from clients;
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+| client_id | name                | email                               | birthdate           | gender | active | created_at          | updated_at          |
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+|         1 | Maria Dolores Gomez | Maria Dolores.9583222J@random.names | 1971-06-06 00:00:00 | F      |      1 | 2020-09-07 08:34:47 | 2020-09-07 08:34:47 |
+|         2 | Adrian Fernandez    | Adrian.55818851J@random.names       | 1970-04-09 00:00:00 | M      |      1 | 2020-09-07 08:34:47 | 2020-09-07 08:34:47 |
+|         3 | Maria Luisa marin   | Maria Luisa.83726282A@random.names  | 1957-07-30 00:00:00 | F      |      1 | 2020-09-07 08:34:47 | 2020-09-07 08:34:47 |
+|         4 | Pedro Sanchez       | Pedro.78522059J@random.names        | 1992-01-31 00:00:00 | M      |      1 | 2020-09-07 08:34:47 | 2020-09-07 08:34:47 |
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+4 rows in set (0.00 sec)
+
+```
+
+Si se realiza una verificacion, hay 2 campos que no se pueden duplicar en esta tabla, el **client_id** y el **email**, por tanto al ejecutar otra sentencia con un dato repetido, mysql lo reconoce y saca el error 1062 Dulicate entry email, el cual indica que no puede estar repetido porque ya existe en la base de datos
+
+```
+mysql> INSERT INTO clients(name, email, birthdate,gender, active) VALUES ('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 1);
+ERROR 1062 (23000): Duplicate entry 'Maria Dolores.9583222J@random.names' for key 'clients.email'
+
+```
+
+Existe una sentencia en Mysql que es recomendable no usar pero que para efectos de la clase se explica el valor de activo o inactivo `1` o `0` se va cambiar por el contrario segun como se haya creado la tabla, y es usar la sentencia **ON DUPLICATE KEY IGNORE ALL** se podria llegar a usar el mismo comando anterior en mysql y el error que arrojaba anteriormente se omitiria con esta sentencia, queda como apunte, pero no se va a ejecutar, cualquier tipo de error la va a pasar esta sentencia y es importante tener en cuenta que los errores que arroja este programa estan realizados por algo y por tanto hay que tenerlos presentes porque existe un porque por el cual salga un error
+
+```
+INSERT INTO clients(name, email, birthdate,gender, active) VALUES ('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 0)
+ON DUPLICATE KEY IGNORE ALL
+```
+
+La sentencia que si es posible utilizar pero con cuidado es **ON DUPLICATE KEY UPDATE** , en este caso se puede actualizar el cliente e indicar a la tabla que esta inactivo, pero solo a ese cliente
+
+```
+INSERT INTO clients(name, email, birthdate,gender, active) VALUES ('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 0)
+ON DUPLICATE KEY UPDATE active = VALUES(active)
+```
+**Antes de ejecutar la sentencia anterior** se puede generar una vista del cliente a revisar 
+
+```
+mysql> select * from clients where client_id = 1;
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+| client_id | name                | email                               | birthdate           | gender | active | created_at          | updated_at          |
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+|         1 | Maria Dolores Gomez | Maria Dolores.9583222J@random.names | 1971-06-06 00:00:00 | F      |      1 | 2020-09-07 08:34:47 | 2020-09-07 08:34:47 |
++-----------+---------------------+-------------------------------------+---------------------+--------+--------+---------------------+---------------------+
+1 row in set (0.02 sec)
+```
+**Pero existe otra forma de ver estos datos** que en vez de cerrar la sentencia anterior con **";"**, se cierra con **\G**
+
+```
+mysql> select * from clients where client_id = 1\G
+*************************** 1. row ***************************
+ client_id: 1
+      name: Maria Dolores Gomez
+     email: Maria Dolores.9583222J@random.names
+ birthdate: 1971-06-06 00:00:00
+    gender: F
+    active: 1
+created_at: 2020-09-07 08:34:47
+updated_at: 2020-09-07 08:34:47
+1 row in set (0.00 sec)
+
+```
+En la informacion presentada anteriormente **Maria Dolores** esta activa representada con un `1` y se quiere dejar inactiva, para realizar la operacion lo que hay que hacer es ejecutar esta sentencia
+
+```
+mysql> INSERT INTO clients(name, email, birthdate,gender, active) VALUES ('Maria Dolores Gomez', 'Maria Dolores.9583222J@random.names', '1971-06-06', 'F', 0)
+    -> ON DUPLICATE KEY UPDATE active = VALUES(active);
+Query OK, 2 rows affected, 1 warning (0.23 sec)
+
+mysql> select * from clients where client_id = 1\G
+*************************** 1. row ***************************
+ client_id: 1
+      name: Maria Dolores Gomez
+     email: Maria Dolores.9583222J@random.names
+ birthdate: 1971-06-06 00:00:00
+    gender: F
+    active: 0
+created_at: 2020-09-07 08:34:47
+updated_at: 2020-09-07 09:05:47
+1 row in set (0.00 sec)
+
+mysql> 
+
+```
+
+y como se observa **maria Dolores** queda inactiva en la tabla
