@@ -2724,6 +2724,13 @@ Esta consulta retorna todas las filas que están en la tabla A y ademas si hay c
 
 Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
 
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n> 
+FROM Tabla_A A
+LEFT JOIN Tabla_B B
+ON A.pk = B.pk
+```
+
 3. Right Join
 
 Esta consulta retorna todas las filas de la tabla B y ademas si hay filas en la tabla A que coinciden también va a traer estas filas de la tabla A.
