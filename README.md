@@ -32,7 +32,7 @@
 
 [Clase 15 Left JOIN](#Clase-15-Left-JOIN)
 
-[]()
+[Clase 16 Tipos de JOIN](#Clase-16-Tipos-de-JOIN)
 
 []()
 
@@ -2686,4 +2686,118 @@ mysql> SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
 +-----------+--------------------+-------------+------------------+
 3 rows in set (0.00 sec)
 
+```
+
+## Clase 16 Tipos de JOIN
+
+En la clase anterior estuvimos hablando de dos tipos de joins que podemos usar cuando estemos trabajando con consultas a nuestras bases de datos.
+
+Existen diferentes formas en las que se pueden unir las tablas en nuestras consultas y de acuerdo con esta unión se va a mostrar información, y es importante siempre tener clara esta relación. En esta clase te voy a mostrar gráficamente 7 diferentes tipos de uniones que puedes realizar.
+
+Usar correctamente estas uniones puede reducir el tiempo de ejecución de tus consultas y mejorar el rendimiento de tus aplicaciones.
+
+Como yo lo veo cuando hacemos uniones en las consultas para seleccionar información, estamos trabajando con tablas, estas tablas podemos verlas como conjuntos de información, de forma que podemos asimilar los joins entre tablas como uniones e intersecciones entre conjuntos.
+
+Supongamos que contamos con dos conjuntos, el conjunto A y el conjunto B, o, la tabla A y la tabla B. Sobre estos conjuntos veamos cuál es el resultado si aplicamos diferentes tipos de join.
+
+1. Inner Join
+
+Esta es la forma mas fácil de seleccionar información de diferentes tablas, es tal vez la que mas usas a diario en tu trabajo con bases de datos. Esta union retorna todas las filas de la tabla A que coinciden en la tabla B. Es decir aquellas que están en la tabla A Y en la tabla B, si lo vemos en conjuntos la intersección entre la tabla A y la B.
+
+![assets/10.jpg](assets/10.jpg)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n> 
+FROM Tabla_A A
+INNER JOIN Tabla_B B
+ON A.pk = B.pk
+```
+
+2. Left Join
+
+Esta consulta retorna todas las filas que están en la tabla A y ademas si hay coincidencias de filas en la tabla B también va a traer esas filas.
+
+![assets/11.jpg](assets/11.jpg)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+3. Right Join
+
+Esta consulta retorna todas las filas de la tabla B y ademas si hay filas en la tabla A que coinciden también va a traer estas filas de la tabla A.
+
+![assets/12.jpg](assets/12.jpg)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+RIGHT JOIN Tabla_B B
+ON A.pk = B.pk
+```
+
+4. Outer Join
+
+Este join retorna TODAS las filas de las dos tablas. Hace la union entre las filas que coinciden entre la tabla A y la tabla B.
+
+![assets/13.png](assets/13.png)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+FULL OUTER JOIN Tabla_B B
+ON A.pk = B.pk
+```
+
+5. Left excluding join
+
+Esta consulta retorna todas las filas de la tabla de la izquierda, es decir la tabla A que no tienen ninguna coincidencia con la tabla de la derecha, es decir la tabla B.
+
+![assets/14.png](assets/14.png)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+LEFT JOIN Tabla_B B
+ON A.pk = B.pk
+WHERE B.pk IS NULL
+```
+
+6. Right Excluding join
+
+Esta consulta retorna todas las filas de la tabla de la derecha, es decir la tabla B que no tienen coincidencias en la tabla de la izquierda, es decir la tabla A.
+
+![assets/15.png](assets/15.png)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+```
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+RIGHT JOIN Tabla_B B
+ON A.pk = B.pk
+WHERE A.pk IS NULL
+```
+
+7. Outer excluding join
+
+Esta consulta retorna todas las filas de la tabla de la izquierda, tabla A, y todas las filas de la tabla de la derecha, tabla B que no coinciden.
+
+![assets/16.png](assets/16.png)
+
+Esto lo podemos implementar de esta forma cuando estemos escribiendo las consultas:
+
+```
+SELECT <select_list>
+FROM Table_A A
+FULL OUTER JOIN Table_B B
+ON A.Key = B.Key
+WHERE A.Key IS NULL OR B.Key IS NULL
 ```
