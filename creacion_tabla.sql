@@ -334,3 +334,21 @@ LEFT JOIN books AS b
 ON b.book_id = t.book_id
 LEFT JOIN authors AS a
 ON b.author_id = a.author_id;
+
+UPDATE clients
+SET email = 'daniel.g@gmail.com'
+WHERE client_id = 65
+LIMIT 1;
+
+UPDATE clients
+SET active = 0
+WHERE 
+client_id IN (44, 39, 66, 49)
+OR `name` LIKE '%Lopez%';
+
+
+SELECT client_id, `name`, active
+FROM clients
+WHERE client_id IN (44, 39, 66, 49)
+OR `name`
+LIKE '%Lopez%';

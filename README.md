@@ -3784,3 +3784,338 @@ mysql> SELECT c.name, t.type, b.title,
 ```
 
 ## Clase 19 Comandos UPDATE Y DELETE
+
+los comandos **UPDATE** y **DELETE** sirven para modificar, actualizar o borrar datos, en este ejemplo se va a dejar todas las sentencias que habrian que ejecutarse para borrar un autor de la base de datos.
+
+lo primero que se va a hacer es consultar aleatoriamente la base de datos de autores con la funcion **rand()** y se va a establecer un limite para no generar todos los datos
+
+```
+mysql> select * from authors order by  rand() limit 10;
++-----------+-------------------+-------------+
+| author_id | name              | nationality |
++-----------+-------------------+-------------+
+|       182 | Machiavelli       | NULL        |
+|       103 | Richard Gordon    | NULL        |
+|        13 | V P Menon         | IND         |
+|       138 | Keith Devlin      | NULL        |
+|        76 | Bob Woodward      | NULL        |
+|       128 | Gerald Durrell    | NULL        |
+|        34 | Albert Camus      | FRA         |
+|        80 | William Dalrymple | NULL        |
+|       174 | Sorabjee          | NULL        |
+|       189 | Steve Eddins      | NULL        |
++-----------+-------------------+-------------+
+10 rows in set (0.07 sec)
+
+```
+entonces por ejemplo se requiere borrar el autor No. 174, para borrarlo se tendria que ejecutar la siguiente sentencia 
+
+pero antes de hacerlo, es importante notar que al final se esta colocando un limite y esto se hace por seguridad, maximo se va a borrar ese No. de autor, se debe verificar cualquier cosa antes de actualizar o borrar algun dato y es bueno colocar limites porque se podria borrar una tabla entera o simplemente datos que no se requerian borrar
+
+para verificar que se borraron los datos primero se hace un conteo de cuantos autores hay en base datos
+
+```
+mysql> SELECT COUNT(*) FROM authors;
++----------+
+| COUNT(*) |
++----------+
+|      132 |
++----------+
+1 row in set (0.33 sec)
+
+```
+
+la tabla indica que existen 132 autores, ahora borraremos el autor No. 174
+
+
+```
+mysql> DELETE FROM authors where author_id = 174 LIMIT 1;
+Query OK, 1 row affected (0.21 sec)
+
+```
+nuevamente se hace el conteo de autores
+
+```
+mysql> SELECT COUNT(*) FROM authors;
++----------+
+| COUNT(*) |
++----------+
+|      131 |
++----------+
+1 row in set (0.02 sec)
+
+```
+
+**ejemplo con UPDATE**
+
+en este caso se consulta la estructura de la tabla de cliente y vemos que por defecto o default el campo active viene en 1 es decir esta activo
+
+se consulta si algun cliente es diferente en ese campo de 1 y es importante notar que el simbolo de diferente es **"<>"** menor que y mayor que
+
+```
+mysql> desc clients;
++------------+---------------+------+-----+-------------------+-------------------+
+| Field      | Type          | Null | Key | Default           | Extra             |
++------------+---------------+------+-----+-------------------+-------------------+
+| client_id  | int unsigned  | NO   | PRI | NULL              | auto_increment    |
+| name       | varchar(50)   | YES  |     | NULL              |                   |
+| email      | varchar(100)  | NO   | UNI | NULL              |                   |
+| birthdate  | date          | YES  |     | NULL              |                   |
+| gender     | enum('M','F') | YES  |     | NULL              |                   |
+| active     | tinyint(1)    | NO   |     | 1                 |                   |
+| created_at | timestamp     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+---------------+------+-----+-------------------+-------------------+
+7 rows in set (0.01 sec)
+
+mysql> SELECT client_id, name FROM clients WHERE active <> 1;
+Empty set (0.00 sec)
+
+```
+En este caso indica que todos los clientes estan activos y lo que se va a hacer es desactivar a un cliente
+
+Nuevamente se genera una random aleatorio esta vez de clientes donde se muestre que estan activos
+
+```
+mysql> SELECT client_id, name, active FROM clients ORDER BY  rand() LIMIT 10;
++-----------+---------------------+--------+
+| client_id | name                | active |
++-----------+---------------------+--------+
+|        22 | Maria angeles Alba  |      1 |
+|        26 | Maria Cruz Morillas |      1 |
+|        55 | Francisco Villar    |      1 |
+|        76 | Maria Pilar Martin  |      1 |
+|         4 | Pedro Sanchez       |      1 |
+|        87 | Luis Saez           |      1 |
+|        23 | Rafael Espinola     |      1 |
+|        74 | Maria Luisa Sanchez |      1 |
+|        91 | Sonia Mari          |      1 |
+|        20 | David Casals        |      1 |
++-----------+---------------------+--------+
+10 rows in set (0.00 sec)
+
+```
+
+en este caso se va a desactivar al cliente No. 74 que es Maria Luisa Sanchez y para actualizar se usa la sentencia **UPDATE**, este funciona de la siguiente forma
+
+```
+UPDATE tabla
+SET
+[columna = valor, ...]
+WHERE
+[condiciones]
+LIMIT #;
+```
+
+a continuacion se realiza la actualizacion
+
+```
+mysql> UPDATE clients
+    -> SET active = 0
+    -> WHERE client_id = 74
+    -> LIMIT 1;
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+```
+y se consulta la misma base de clientes que se habia generado aleatoriamente, solo que esta vez se traen los datos de forma puntual
+
+```
+mysql> SELECT client_id, name, active FROM clients WHERE client_id IN (22, 26, 55, 76, 4, 87, 23, 74, 91, 20);
++-----------+---------------------+--------+
+| client_id | name                | active |
++-----------+---------------------+--------+
+|         4 | Pedro Sanchez       |      1 |
+|        20 | David Casals        |      1 |
+|        22 | Maria angeles Alba  |      1 |
+|        23 | Rafael Espinola     |      1 |
+|        26 | Maria Cruz Morillas |      1 |
+|        55 | Francisco Villar    |      1 |
+|        74 | Maria Luisa Sanchez |      0 |
+|        76 | Maria Pilar Martin  |      1 |
+|        87 | Luis Saez           |      1 |
+|        91 | Sonia Mari          |      1 |
++-----------+---------------------+--------+
+10 rows in set (0.03 sec)
+
+```
+y se observa que el cliente No. 74 ahora se encuentra inactivo
+
+**otro ejemplo para usar con UPDATE**
+
+buscar un cliente aleatoriamente para cambiar el correo 
+
+```
+mysql> desc clients;
++------------+---------------+------+-----+-------------------+-------------------+
+| Field      | Type          | Null | Key | Default           | Extra             |
++------------+---------------+------+-----+-------------------+-------------------+
+| client_id  | int unsigned  | NO   | PRI | NULL              | auto_increment    |
+| name       | varchar(50)   | YES  |     | NULL              |                   |
+| email      | varchar(100)  | NO   | UNI | NULL              |                   |
+| birthdate  | date          | YES  |     | NULL              |                   |
+| gender     | enum('M','F') | YES  |     | NULL              |                   |
+| active     | tinyint(1)    | NO   |     | 1                 |                   |
+| created_at | timestamp     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+---------------+------+-----+-------------------+-------------------+
+7 rows in set (0.01 sec)
+
+mysql> SELECT client_id, name, email, active FROM clients ORDER BY rand() LIMIT 10;
++-----------+-------------------------+--------------------------------------+--------+
+| client_id | name                    | email                                | active |
++-----------+-------------------------+--------------------------------------+--------+
+|        81 | Antonia Giron           | Antonia.32080105G@random.names       |      1 |
+|        78 | Jesus Perez             | Jesus.15757299E@random.names         |      1 |
+|         7 | Javier Barrio           | Javier.54966248C@random.names        |      1 |
+|         1 | Maria Dolores Gomez     | Maria Dolores.95983222J@random.names |      1 |
+|        95 | Diego Correa            | Diego.44862413Q@random.names         |      1 |
+|        45 | Sara Rodriguez          | Sara.16181250Z@random.names          |      1 |
+|        22 | Maria angeles Alba      | Maria angeles.91808919A@random.names |      1 |
+|        65 | Daniel Garcia           | Daniel.01386486T@random.names        |      1 |
+|        57 | Esther Pina             | Esther.36300729J@random.names        |      1 |
+|        41 | Maria Dolores Rodriguez | Maria Dolores.75444599E@random.names |      1 |
++-----------+-------------------------+--------------------------------------+--------+
+10 rows in set (0.00 sec)
+
+```
+
+al cliente No. 65 Daniel Garcia se le va a cambiar el email por otro
+
+```
+mysql> UPDATE clients
+    -> SET email = 'daniel.g@gmail.com'
+    -> WHERE client_id = 65
+    -> LIMIT 1;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+```
+luego se consulta la tabla con los mismos cliente para verificar si Daniel Garcia tiene el correo actualizado
+
+```
+mysql> SELECT client_id, name, email, active FROM clients WHERE client_id IN (81, 78, 7, 1, 95, 45, 22, 65, 57, 41);
++-----------+-------------------------+--------------------------------------+--------+
+| client_id | name                    | email                                | active |
++-----------+-------------------------+--------------------------------------+--------+
+|         1 | Maria Dolores Gomez     | Maria Dolores.95983222J@random.names |      1 |
+|         7 | Javier Barrio           | Javier.54966248C@random.names        |      1 |
+|        22 | Maria angeles Alba      | Maria angeles.91808919A@random.names |      1 |
+|        41 | Maria Dolores Rodriguez | Maria Dolores.75444599E@random.names |      1 |
+|        45 | Sara Rodriguez          | Sara.16181250Z@random.names          |      1 |
+|        57 | Esther Pina             | Esther.36300729J@random.names        |      1 |
+|        65 | Daniel Garcia           | daniel.g@gmail.com                   |      1 |
+|        78 | Jesus Perez             | Jesus.15757299E@random.names         |      1 |
+|        81 | Antonia Giron           | Antonia.32080105G@random.names       |      1 |
+|        95 | Diego Correa            | Diego.44862413Q@random.names         |      1 |
++-----------+-------------------------+--------------------------------------+--------+
+10 rows in set (0.00 sec)
+
+```
+
+**Otro ejemplo donde se cambian varios clientes de activos a inactivos**
+
+se consulta la base de datos aleatoriamente y se seleccionan algunos, en este caso tambien se van a utilizar personas que tengan un apellido que empiecen y terminen en algo para tambien dejarlos inactivos
+
+```
+mysql> SELECT client_id, name, active FROM clients ORDER BY rand() LIMIT 10;
++-----------+-----------------------+--------+
+| client_id | name                  | active |
++-----------+-----------------------+--------+
+|        88 | Susana Nevado         |      1 |
+|        19 | Maria Moreno          |      1 |
+|        44 | Carmen Robles         |      1 |
+|        82 | Juan Casero           |      1 |
+|        39 | Jesus Rodriguez       |      1 |
+|        34 | Maria Teresa Castillo |      1 |
+|        63 | Francisco Jose Leon   |      1 |
+|        66 | Ana Maria Martinez    |      1 |
+|        48 | Jose Sanchez          |      1 |
+|        49 | Isabel Martinez       |      1 |
++-----------+-----------------------+--------+
+10 rows in set (0.00 sec)
+
+```
+
+y acontinuacion se va a desactivar al cliente 44, 39, 66 y 49 y todas las personas que tengan en su nombre %Lopez%
+
+```
+mysql> UPDATE clients
+    -> SET active = 0
+    -> WHERE 
+    -> client_id IN (44, 39, 66, 49)
+    -> OR `name` LIKE '%Lopez%';
+Query OK, 6 rows affected (0.15 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+```
+
+y ahora se consulta en base de datos las personas que quedaron inactivas con la anterior instruccion 
+
+ ```
+mysql> SELECT client_id, `name`, active
+    -> FROM clients
+    -> WHERE client_id IN (44, 39, 66, 49)
+    -> OR `name`
+    -> LIKE '%Lopez%';
++-----------+--------------------+--------+
+| client_id | name               | active |
++-----------+--------------------+--------+
+|        29 | Juana Maria Lopez  |      0 |
+|        39 | Jesus Rodriguez    |      0 |
+|        44 | Carmen Robles      |      0 |
+|        49 | Isabel Martinez    |      0 |
+|        62 | Carmen Lopez       |      0 |
+|        66 | Ana Maria Martinez |      0 |
++-----------+--------------------+--------+
+6 rows in set (0.00 sec)
+
+ ```
+
+ y en este caso desactivo a  los clientes con id 44, 39, 66, 49 y ademas todos los que en su nombre tenian Lopez que fueron el 29 y 62
+
+ la sentencia **TRUNCATE** puede vaciar el contenido de una tabla completamente, sin alterar la estructura
+
+ en este caso se va a vaciar la tabla transactions
+
+ primero consulto que tiene la tabla transactions, luego borro y nuevamente consulto
+
+```
+mysql> SELECT * FROM transactions;
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+| transaction_id | book_id | client_id | type   | created_at          | modified_at         | finished |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+|              1 |      12 |        34 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              2 |      54 |        87 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        0 |
+|              3 |       3 |        14 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              4 |       1 |        54 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              5 |      12 |        81 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              6 |      12 |        81 | return | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              7 |      87 |        29 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              8 |       6 |        76 | sell   | 2020-08-09 00:00:00 | 2020-09-08 09:43:35 |        0 |
+|              9 |       6 |        76 | sell   | 2016-09-08 00:00:00 | 2020-09-08 09:51:53 |        0 |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+9 rows in set (0.01 sec)
+
+mysql> TRUNCATE transactions;
+Query OK, 0 rows affected (2.11 sec)
+
+mysql> SELECT * FROM transactions;
+Empty set (0.05 sec)
+```
+como se puede ver la tabla de transacciones ahora se encuentra vacia pero existe la estructura 
+
+ ```
+mysql> desc transactions;
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field          | Type                         | Null | Key | Default           | Extra                                         |
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+| transaction_id | int unsigned                 | NO   | PRI | NULL              | auto_increment                                |
+| book_id        | int unsigned                 | NO   |     | NULL              |                                               |
+| client_id      | int unsigned                 | NO   |     | NULL              |                                               |
+| type           | enum('sell','lend','return') | NO   |     | NULL              |                                               |
+| created_at     | timestamp                    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| modified_at    | timestamp                    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+| finished       | tinyint(1)                   | NO   |     | 0                 |                                               |
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+7 rows in set (0.01 sec)
+
+ ```
