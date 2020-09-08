@@ -42,7 +42,7 @@
 
 [Clase 20 Super Querys](#Clase-20-Super-Querys)
 
-[]()
+[Clase 21 Comando mysqldump](#Clase-21-Comando-mysqldump)
 
 []()
 
@@ -4217,7 +4217,7 @@ mysql> SELECT COUNT(book_id),
 +----------------+-------+-------+
 1 row in set (1.17 sec)
 
-````
+```
 
 obtener libros inferiores a 1950, entre 1950 y 1990, entre 1990 y 2000
 
@@ -4286,3 +4286,135 @@ mysql> SELECT nationality, COUNT(book_id),
 13 rows in set (0.17 sec)
 
 ```
+
+## Clase 21 Comando mysqldump
+
+Es recomendable usar siempre la documentacion para hacer algun cambio en una base de datos o si se tiene el desconocimiento de algo.
+
+La sentencia **ALTER** sirve para modificar tablas en bases de datos.
+
+por ejemplo a la tabla de autores se le va a agregar el año de nacimiento con la siguiente sentencia
+
+```
+mysql> desc authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   | UNI | NULL    |                |
+| nationality | varchar(100) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.67 sec)
+
+mysql> ALTER TABLE authors ADD COLUMN birthyear 
+    -> INTEGER  DEFAULT 1930
+    -> AFTER `name`;
+Query OK, 0 rows affected (5.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   | UNI | NULL    |                |
+| birthyear   | int          | YES  |     | 1930    |                |
+| nationality | varchar(100) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+```
+
+si se quiere cambiar alguna columna porque se definio mal de alguna forma tambien se usa la sentencia **ALTER** y **MODIFY**
+
+por ejemplo el año 1930 quedo mal por Default, y aqui lo que se va a hacer es corregir al año 1920
+
+```
+mysql> ALTER TABLE authors
+    -> MODIFY COLUMN birthyear year DEFAULT 1920;
+Query OK, 131 rows affected (3.65 sec)
+Records: 131  Duplicates: 0  Warnings: 0
+
+mysql> desc authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   | UNI | NULL    |                |
+| birthyear   | year         | YES  |     | 1920    |                |
+| nationality | varchar(100) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+```
+
+y ahora para borrar la columna que se creo se usa la sentencia **ALTER** y **DROP**
+
+```
+mysql> ALTER TABLE authors
+    -> DROP COLUMN birthyear;
+Query OK, 0 rows affected (2.34 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc authors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| author_id   | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   | UNI | NULL    |                |
+| nationality | varchar(100) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+```
+
+**Realiar Backup** de la base de datos con todos sus parametros es decir, como versiono o guardo ya sea la informacio y estructura de las tablas que contiene mi base de datos **pruebaplatzi**
+
+```
+mysql> show tables;
++------------------------+
+| Tables_in_pruebaplatzi |
++------------------------+
+| authors                |
+| books                  |
+| clients                |
+| transactions           |
++------------------------+
+4 rows in set (0.10 sec)
+
+```
+
+Existen 2 formas de hacerlo con la misma herramienta que aunque viene con **mysql** no es parte de ella y es **mysqldump**, una de las practicas comunes es versionar el esquema de datos mediante algun sistema de versionamiento como por ejemplo GitHub, en ese caso se usaria la segunda forma
+
+- La 1 forma es traer esquema y datos, es decir, traer la base de datos a un archivo de texto para despues crear la base de datos
+
+en la terminal se coloca la siguiente sentencia
+
+```
+mysqldump -u root -p pruebaplatzi
+```
+
+Esto lo que hace es traer todos los datos que existen en la base de datos **pruebaplatzi**, los borra y los deja listos para crear de nuevo, esto sirve para un respaldo local
+
+- El 2 es solo traer el esquema
+
+en la terminal se coloca la siguiente sentencia
+
+```
+mysqldump -u root -p -d pruebaplatzi
+```
+
+y en estos solamente crea las tablas, realizar pruebas en consola para verificar que es lo que se esta realizando si se coloca **> nombre_de_archivo.sql** va a exportar el esquema a una base de datos con extension **.sql**, importante verificar carpeta en la que se encuentren con pwd
+
+```
+mysqldump -u root -p -d pruebaplatzi > esquema.sql
+```
+Despues de ejecutar esta sentencia en la terminal verificar la carpeta donde se exporto
+
+## Clase 22 Bases de datos para Big Data
+
+En esta clase el profesor Alberto Alcocer nos muestra cómo navegar dentro de una consola de MySQL desde 0, cómo crear tablas y proyectar su diseño para que sean útiles y fácilmente explotables con grandes cantidades de información.
+
+MySQL es un sistema de gestión de bases de datos relacionales, de código abierto y basado en el lenguaje SQL. Cuenta con una gran cantidad de aplicaciones como el desarrollo web o Big Data.
+
+ver video https://youtu.be/raSv24T4cjM

@@ -391,3 +391,13 @@ JOIN authors AS a
 ON a.author_id = b.author_id
 WHERE a.nationality IS NOT NULL
 GROUP BY nationality;
+
+ALTER TABLE authors ADD COLUMN birthyear 
+INTEGER  DEFAULT 1930
+AFTER `name`;
+
+ALTER TABLE authors
+MODIFY COLUMN birthyear year DEFAULT 1920;
+
+ALTER TABLE authors
+DROP COLUMN birthyear;
