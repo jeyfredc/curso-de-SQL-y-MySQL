@@ -280,3 +280,57 @@ WHERE nationality IS NOT NULL
 AND nationality IN ('RUS', 'ENG')
 GROUP BY nationality
 ORDER BY c_authors DESC, nationality;
+
+SELECT nationality, AVG(price) AS prom,
+STDDEV(price) AS std
+FROM books AS b
+JOIN authors AS a
+ON a.author_id = b.author_id
+WHERE nationality IS NOT NULL
+GROUP BY nationality
+ORDER BY prom DESC;
+
+SELECT nationality,
+COUNT(book_id) as books,
+AVG(price) AS prom,
+STDDEV(price) AS std
+FROM books AS b
+JOIN authors AS a
+ON a.author_id = b.author_id
+WHERE nationality IS NOT NULL
+GROUP BY nationality
+ORDER BY books DESC;
+
+SELECT MAX(price), MIN(price)
+FROM books;
+
+SELECT nationality, MAX(price), MIN(price)
+FROM books AS b
+JOIN authors AS a
+On a.author_id = b.author_id
+WHERE nationality IS NOT NULL
+GROUP BY nationality
+ORDER BY nationality;
+
+
+SELECT c.name, t.type, b.title,
+CONCAT(a.name, " (",a.nationality, ")") AS autor
+FROM transactions AS t
+LEFT JOIN clients AS c
+ON c.client_id = t.client_id
+LEFT JOIN books AS b
+ON b.book_id = t.book_id
+LEFT JOIN authors AS a
+ON b.author_id = a.author_id;
+
+
+SELECT c.name, t.type, b.title,
+CONCAT(a.name, " (",a.nationality, ")") AS autor,
+TO_DAYS(NOW()) - TO_DAYS(t.created_at) AS ago
+FROM transactions AS t
+LEFT JOIN clients AS c
+ON c.client_id = t.client_id
+LEFT JOIN books AS b
+ON b.book_id = t.book_id
+LEFT JOIN authors AS a
+ON b.author_id = a.author_id;

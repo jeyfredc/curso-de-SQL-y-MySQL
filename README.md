@@ -36,9 +36,9 @@
 
 [Clase 17 5 casos de negocio](#Clase-17-5-casos-de-negocio)
 
-[]()
+[Clase 18 Continuación de casos de negocio](#Clase-18-Continuación-de-casos-de-negocio)
 
-[]()
+[Clase 19 Comandos UPDATE Y DELETE](#Clase-19-Comandos-UPDATE-Y-DELETE)
 
 []()
 
@@ -3226,3 +3226,561 @@ mysql> SELECT nationality, COUNT(author_id) AS c_authors
 2 rows in set (0.01 sec)
 
 ```
+
+## Clase 18 Continuación de casos de negocio
+
+4. ¿Cuál es el promedio/desviación standard del precio de libros?
+
+Si no se tiene precios de las tablas, lo primero que hay que hacer es consultar si los hay,
+se puede hacer mendiante el comando 
+
+```
+SELECT title, price FROM books;
+```
+puede que aparezcan maximo entre 10 a 15 precios pero no esta completo, en caso de que no insertar lo siguiente en Mysql
+
+```
+TRUNCATE `books`;
+
+INSERT INTO `books` VALUES (1,1,'The Startup Playbook',2013,'en',NULL,10.00,1,5,'Advice from the experts'),
+(2,1,'The Startup Playbook',2014,'es',NULL,10.00,1,5,'Consejo de los expertos, traducido por Platzi'),
+(3,3,'Estudio en escarlata',1887,'es',NULL,5.00,1,10,'La primera novela de Sherlock Holmes'),
+(4,6,'Wallander: Asesinos sin rostro',1991,'es',NULL,15.00,1,3,''),
+(5,6,'Wallander: Los perros de Riga',1992,'es',NULL,15.00,1,3,''),
+(6,6,'Wallander: La leona blanca',1993,'es',NULL,15.00,1,3,''),
+(7,6,'Wallander: El hombre sonriente',1994,'es',NULL,15.00,1,3,''),
+(8,6,'Wallander: La falsa pista',1995,'es',NULL,15.00,1,3,''),
+(9,6,'Wallander: La quinta mujer',1996,'es',NULL,15.00,1,3,''),
+(10,6,'Wallander: Pisando los talones',1997,'es',NULL,15.00,1,3,''),
+(11,6,'Wallander: Cortafuegos',1998,'es',NULL,15.00,1,3,''),
+(12,5,'El llano en llamas',1953,'es',NULL,10.00,0,1,'Cuentos mexicanos'),
+(13,7,'Fundamentalsof Wavelets',1900,'en',NULL,15.20,1,4,NULL),
+(14,8,'Data Smart',1900,'en',NULL,20.5,1,4,NULL),
+(15,9,'God Created the Integers',1900,'en',NULL,12.5,1,4,NULL),
+(16,10,'Superfreakonomics',1900,'en',NULL,10.5,1,4,NULL),
+(17,11,'Orientalism',1900,'en',NULL,21.2,1,4,NULL),
+(18,12,'The Nature of Statistical Learning Theory',1900,'en',NULL,15.0,1,4,NULL),
+(19,13,'Integrationof the Indian States',1900,'en',NULL,13.5,1,4,NULL),
+(20,14,'The Drunkard\'s Walk',1900,'en',NULL,21.2,1,4,NULL),
+(21,15,'Image Processing & Mathematical Morphology',1900,'en',NULL,12.3,1,4,NULL),
+(22,16,'Howto Think Like Sherlock Holmes',1900,'en',NULL,15.2,1,4,NULL),
+(23,17,'Data Scientists at Work',1900,'en',NULL,15.2,1,4,NULL),
+(24,18,'Slaughterhouse Five',1900,'en',NULL,15.2,1,4,NULL),
+(25,19,'Birthof a Theorem',1900,'en',NULL,10.5,1,4,NULL),
+(26,20,'Structure & Interpretation of Computer Programs',1900,'en',NULL,10.5,1,4,NULL),
+(27,21,'The Age of Wrath',1900,'en',NULL,10.5,1,4,NULL),
+(28,22,'The Trial',1900,'en',NULL,15.5,1,4,NULL),
+(29,23,'Statistical Decision Theory',1900,'en',NULL,15.5,1,4,NULL),
+(30,24,'Data Mining Handbook',1900,'en',NULL,15.5,1,4,NULL),
+(31,25,'TheNew Machiavelli',1900,'en',NULL,15.5,1,4,NULL),
+(32,26,'Physics & Philosophy',1900,'en',NULL,10.2,1,4,NULL),
+(33,27,'Making Software',1900,'en',NULL,11.2,1,4,NULL),
+(34,28,'Vol I Analysis',1900,'en',NULL,15.3,1,4,NULL),
+(35,29,'Machine Learning for Hackers',1900,'en',NULL,10.5,1,4,NULL),
+(36,30,'TheSignaland the Noise',1900,'en',NULL,12.5,1,4,NULL),
+(37,31,'Pythonfor Data Analysis',1900,'en',NULL,10.0,1,4,NULL),
+(38,32,'Introductionto Algorithms',1900,'en',NULL,21.5,1,4,NULL),
+(39,33,'The Beautiful and the Damned',1900,'en',NULL,20.5,1,4,NULL),
+(40,34,'The Outsider',1900,'en',NULL,22.5,1,4,NULL),
+(41,3,'The - Vol I Complete Sherlock Holmes',1900,'en',NULL,23.5,1,4,NULL),
+(42,3,'The - Vol II Complete Sherlock Holmes',1900,'en',NULL,21.5,1,4,NULL),
+(43,37,'The Wealth of Nations',1900,'en',NULL,22.5,1,4,NULL),
+(44,38,'The Pillars of the Earth',1900,'en',NULL,24.5,1,4,NULL),
+(45,39,'The Tao of Physics',1900,'en',NULL,15.5,1,4,NULL),
+(46,40,'Surely You\'s re Joking Mr Feynman',1900,'en',NULL,12.3,1,4,NULL),
+(47,41,'A Farewell to Arms',1900,'en',NULL,14.6,1,4,NULL),
+(48,42,'The Veteran',1900,'en',NULL,10.6,1,4,NULL),
+(49,43,'False Impressions',1900,'en',NULL,12.4,1,4,NULL),
+(50,44,'The Last Lecture',1900,'en',NULL,13.6,1,4,NULL),
+(51,45,'Returnof the Primitive',1900,'en',NULL,14.3,1,4,NULL),
+(52,46,'Jurassic Park',1900,'en',NULL,13.5,1,4,NULL),
+(53,47,'A Russian Journal',1900,'en',NULL,17.5,1,4,NULL),
+(54,48,'Talesof Mystery and Imagination',1900,'en',NULL,19.5,1,4,NULL),
+(55,10,'Freakonomics',1900,'en',NULL,19.99,1,4,NULL),
+(56,39,'The Hidden Connections',1900,'en',NULL,15.98,1,4,NULL),
+(57,51,'The Story of Philosophy',1900,'en',NULL,14.89,1,4,NULL),
+(58,52,'Asami Asami',1900,'en',NULL,15.6,1,4,NULL),
+(59,47,'Journalof a Novel',1900,'en',NULL,14.5,1,4,NULL),
+(60,47,'Once There Was a War',1900,'en',NULL,14.6,1,4,NULL),
+(61,47,'The Moon is Down',1900,'en',NULL,21.5,1,4,NULL),
+(62,56,'The Brethren',1900,'en',NULL,22.6,1,4,NULL),
+(63,57,'In a Free State',1900,'en',NULL,22.4,1,4,NULL),
+(64,58,'Catch22',1900,'en',NULL,20.5,1,4,NULL),
+(65,59,'The Complete Mastermind',1900,'en',NULL,14.6,1,4,NULL),
+(66,60,'Dylanon Dylan',1900,'en',NULL,13.8,1,4,NULL),
+(67,61,'Soft Computing & Intelligent Systems',1900,'en',NULL,17.8,1,4,NULL),
+(68,62,'Textbookof Economic Theory',1900,'en',NULL,17.4,1,4,NULL),
+(69,63,'Econometric Analysis',1900,'en',NULL,18.9,1,4,NULL),
+(70,64,'Learning OpenCV',1900,'en',NULL,18.54,1,4,NULL),
+(71,65,'Data Structures Using C & C++',1900,'en',NULL,17.6,1,4,NULL),
+(72,66,'A Modern Approach Computer Vision',1900,'en',NULL,13.5,1,4,NULL),
+(73,67,'Principlesof Communication Systems',1900,'en',NULL,15.4,1,4,NULL),
+(74,68,'Let Us C',1900,'en',NULL,15.6,1,4,NULL),
+(75,69,'The Amulet of Samarkand',1900,'en',NULL,14.6,1,4,NULL),
+(76,70,'Crimeand Punishment',1900,'en',NULL,17.5,1,4,NULL),
+(77,71,'Angels & Demons',1900,'en',NULL,15.3,1,4,NULL),
+(78,72,'The Argumentative Indian',1900,'en',NULL,18.9,1,4,NULL),
+(79,73,'Seaof Poppies',1900,'en',NULL,24.5,1,4,NULL),
+(80,72,'The Idea of Justice',1900,'en',NULL,26.3,1,4,NULL),
+(81,75,'A Raisin in the Sun',1900,'en',NULL,27.8,1,4,NULL),
+(82,76,'All the President\'s Men',1900,'en',NULL,29.5,1,4,NULL),
+(83,43,'A Prisoner of Birth',1900,'en',NULL,28.7,1,4,NULL),
+(84,78,'Scoop!',1900,'en',NULL,28.9,1,4,NULL),
+(85,79,'Ahe Manohar Tari',1900,'en',NULL,24.1,1,4,NULL),
+(86,80,'The Last Mughal',1900,'en',NULL,15.3,1,4,NULL),
+(87,81,'Vol39 No. 1 Social Choice & Welfare',1900,'en',NULL,13.6,1,4,NULL),
+(88,52,'Radiowaril Bhashane & Shrutika',1900,'en',NULL,18.4,1,4,NULL),
+(89,52,'Gun Gayin Awadi',1900,'en',NULL,24.1,1,4,NULL),
+(90,52,'Aghal Paghal',1900,'en',NULL,26.68,1,4,NULL),
+(91,85,'Maqta-e-Ghalib',1900,'en',NULL,25.3,1,4,NULL),
+(92,86,'Manasa',1900,'en',NULL,24.3,1,4,NULL),
+(93,87,'India from Midnight to Milennium',1900,'en',NULL,23.6,1,4,NULL),
+(94,87,'The Great Indian Novel',1900,'en',NULL,21.0,1,4,NULL),
+(95,89,'O Jerusalem!',1900,'en',NULL,20.20,1,4,NULL),
+(96,89,'The City of Joy',1900,'en',NULL,20.0,1,4,NULL),
+(97,89,'Freedom at Midnight',1900,'en',NULL,19.98,1,4,NULL),
+(98,47,'The Winter of Our Discontent',1900,'en',NULL,27.0,1,4,NULL),
+(99,93,'On Education',1900,'en',NULL,21.8,1,4,NULL),
+(100,94,'Free Will',1900,'en',NULL,11.4,1,4,NULL),
+(101,87,'Booklessin Baghdad',1900,'en',NULL,13.6,1,4,NULL),
+(102,96,'TheCaseof the Lame Canary',1900,'en',NULL,15.6,1,4,NULL),
+(103,9,'The Theory of Everything',1900,'en',NULL,14.6,1,4,NULL),
+(104,98,'New Markets & Other Essays',1900,'en',NULL,13.5,1,4,NULL),
+(105,99,'Electric Universe',1900,'en',NULL,18.5,1,4,NULL),
+(106,100,'The Hunchback of Notre Dame',1900,'en',NULL,17.7,1,4,NULL),
+(107,47,'Burning Bright',1900,'en',NULL,17.7,1,4,NULL),
+(108,98,'The Age of Discontuinity',1900,'en',NULL,15.5,1,4,NULL),
+(109,103,'Doctorin the Nude',1900,'en',NULL,24.1,1,4,NULL),
+(110,104,'DownandOutin Paris & London',1900,'en',NULL,13.3,1,4,NULL),
+(111,72,'Identity & Violence',1900,'en',NULL,16.65,1,4,NULL),
+(112,80,'Beyond the Three Seas',1900,'en',NULL,15.21,1,4,NULL),
+(113,107,'Talking Straight',1900,'en',NULL,17.5,1,4,NULL),
+(114,108,'Vol3 Maugham\'s Collected Short Stories',1900,'en',NULL,14.4,1,4,NULL),
+(115,42,'The Phantom of Manhattan',1900,'en',NULL,14.23,1,4,NULL),
+(116,108,'Ashendenof The British Agent',1900,'en',NULL,13.25,1,4,NULL),
+(117,111,'Zen & The Art of Motorcycle Maintenance',1900,'en',NULL,17.8,1,4,NULL),
+(118,112,'The Great War for Civilization',1900,'en',NULL,17.8,1,4,NULL),
+(119,45,'We the Living',1900,'en',NULL,16.5,1,4,NULL),
+(120,114,'The Artist and the Mathematician',1900,'en',NULL,12.21,1,4,NULL),
+(121,93,'Historyof Western Philosophy',1900,'en',NULL,21.12,1,4,NULL),
+(122,72,'Rationality & Freedom',1900,'en',NULL,8.6,1,4,NULL),
+(123,117,'Clashof Civilizations and Remaking of the World Order',1900,'en',NULL,12.3,1,4,NULL),
+(124,39,'Uncommon Wisdom',1900,'en',NULL,11.20,1,4,NULL),
+(125,119,'One',1900,'en',NULL,11.01,1,4,NULL),
+(126,120,'To Sir With Love',1900,'en',NULL,18.7,1,4,NULL),
+(127,121,'Half A Life',1900,'en',NULL,24.42,1,4,NULL),
+(128,122,'The Discovery of India',1900,'en',NULL,23.25,1,4,NULL),
+(129,52,'Apulki',1900,'en',NULL,21.09,1,4,NULL),
+(130,93,'Unpopular Essays',1900,'en',NULL,12.65,1,4,NULL),
+(131,42,'The Deceiver',1900,'en',NULL,13.51,1,4,NULL),
+(132,76,'Veil: Secret Wars of the CIA',1900,'en',NULL,41.20,1,4,NULL),
+(133,52,'Char Shabda',1900,'en',NULL,14.32,1,4,NULL),
+(134,128,'Rosyis My Relative',1900,'en',NULL,42.5,1,4,NULL),
+(135,108,'The Moon and Sixpence',1900,'en',NULL,14.30,1,4,NULL),
+(136,130,'A Short History of the World',1900,'en',NULL,18.68,1,4,NULL),
+(137,108,'The Trembling of a Leaf',1900,'en',NULL,17.21,1,4,NULL),
+(138,103,'Doctoron the Brain',1900,'en',NULL,21.10,1,4,NULL),
+(139,133,'Simpsons & Their Mathematical Secrets',1900,'en',NULL,21.41,1,4,NULL),
+(140,134,'Pattern Classification',1900,'en',NULL,21.4,1,4,NULL),
+(141,135,'From Beirut to Jerusalem',1900,'en',NULL,22.32,1,4,NULL),
+(142,133,'The Code Book',1900,'en',NULL,24.1,1,4,NULL),
+(143,112,'The Age of the Warrior',1900,'en',NULL,10.62,1,4,NULL),
+(144,138,'The Numbers Behind Numb3rs',1900,'en',NULL,11.56,1,4,NULL),
+(145,47,'A Life in Letters',1900,'en',NULL,14.3,1,4,NULL),
+(146,140,'The Information',1900,'en',NULL,16.15,1,4,NULL),
+(147,141,'Elementsof Information Theory',1900,'en',NULL,17.52,1,4,NULL),
+(148,142,'Power Electronics - Rashid',1900,'en',NULL,14.10,1,4,NULL),
+(149,143,'Power Electronics - Mohan',1900,'en',NULL,17.51,1,4,NULL),
+(150,144,'Neural Networks',1900,'en',NULL,21.20,1,4,NULL),
+(151,47,'The Grapes of Wrath',1900,'en',NULL,10.52,1,4,NULL),
+(152,52,'Vyakti ani Valli',1900,'en',NULL,10.10,1,4,NULL),
+(153,12,'Statistical Learning Theory',1900,'en',NULL,10.99,1,4,NULL),
+(154,148,'Empireof the Mughal - The Tainted Throne',1900,'en',NULL,10.87,1,4,NULL),
+(155,148,'Empireof the Mughal - Brothers at War',1900,'en',NULL,14.25,1,4,NULL),
+(156,148,'Empireof the Mughal - Ruler of the World',1900,'en',NULL,18.58,1,4,NULL),
+(157,148,'Empireof the Mughal - The Serpent\'s Tooth',1900,'en',NULL,14.65,1,4,NULL),
+(158,148,'Empireof the Mughal - Raiders from the North',1900,'en',NULL,17.89,1,4,NULL),
+(159,153,'Mossad',1900,'en',NULL,14.56,1,4,NULL),
+(160,154,'Jim Corbett Omnibus',1900,'en',NULL,14.19,1,4,NULL),
+(161,155,'20000 Leagues Under the Sea',1900,'en',NULL,19.41,1,4,NULL),
+(162,156,'Batatyachi Chal',1900,'en',NULL,18.57,1,4,NULL),
+(163,156,'Hafasavnuk',1900,'en',NULL,24.12,1,4,NULL),
+(164,156,'Urlasurla',1900,'en',NULL,12.35,1,4,NULL),
+(165,68,'Pointersin C',1900,'en',NULL,45.4,1,4,NULL),
+(166,160,'The Cathedral and the Bazaar',1900,'en',NULL,14.25,1,4,NULL),
+(167,161,'Designwith OpAmps',1900,'en',NULL,14.21,1,4,NULL),
+(168,162,'Think Complexity',1900,'en',NULL,12.63,1,4,NULL),
+(169,163,'The Devil\'s Advocate',1900,'en',NULL,14.56,1,4,NULL),
+(170,45,'Ayn Rand Answers',1900,'en',NULL,24.24,1,4,NULL),
+(171,45,'Philosophy: Who Needs It',1900,'en',NULL,13.52,1,4,NULL),
+(172,166,'Data Analysis withOpen Source Tools',1900,'en',NULL,18.9,1,4,NULL),
+(173,167,'Broca\'s Brain',1900,'en',NULL,18.98,1,4,NULL),
+(174,168,'Menof Mathematics',1900,'en',NULL,17.54,1,4,NULL),
+(175,169,'Oxford book of Modern Science Writing',1900,'en',NULL,17.58,1,4,NULL),
+(176,170,'Judiciaryand Democracy Justice',1900,'en',NULL,14.89,1,4,NULL),
+(177,171,'The Arthashastra',1900,'en',NULL,15.87,1,4,NULL),
+(178,172,'We the People',1900,'en',NULL,16.25,1,4,NULL),
+(179,172,'We the Nation',1900,'en',NULL,11.145,1,4,NULL),
+(180,174,'The Courtroom Genius',1900,'en',NULL,12.25,1,4,NULL),
+(181,175,'Dongrito Dubai',1900,'en',NULL,14.00,1,4,NULL),
+(182,176,'Foundation History of England',1900,'en',NULL,16.52,1,4,NULL),
+(183,80,'Cityof Djinns',1900,'en',NULL,17.52,1,4,NULL),
+(184,178,'India\'s Legal System',1900,'en',NULL,13.25,1,4,NULL),
+(185,179,'More Tears to Cry',1900,'en',NULL,18.65,1,4,NULL),
+(186,180,'The Ropemaker',1900,'en',NULL,17.85,1,4,NULL),
+(188,182,'The Prince',1900,'en',NULL,19.52,1,4,NULL),
+(189,183,'Eyelessin Gaza',1900,'en',NULL,13.25,1,4,NULL),
+(190,184,'Talesof Beedle the Bard',1900,'en',NULL,25.63,1,4,NULL),
+(191,185,'Girlwith the Dragon Tattoo',1900,'en',NULL,18.58,1,4,NULL),
+(192,185,'Girl who kicked the Hornet\'s Nest',1900,'en',NULL,17.56,1,4,NULL),
+(193,185,'Girl who played with Fire',1900,'en',NULL,16.52,1,4,NULL),
+(194,28,'Structureand Randomness',1900,'en',NULL,16.34,1,4,NULL),
+(195,189,'Image Processing with MATLAB',1900,'en',NULL,13.28,1,4,NULL),
+(196,104,'Animal Farm',1900,'en',NULL,24.24,1,4,NULL),
+(197,70,'The Idiot',1900,'en',NULL,26.34,1,4,NULL),
+(198,192,'A Christmas Carol',1900,'en',NULL,27.17,1,4,NULL);
+
+```
+
+y luego si consultar nuevamente la base de precios de libros con las siguientes sentencias 
+
+**para consultar libros y precios**
+
+```
+SELECT title, price FROM books;
+```
+
+**para consultar un limite de 10 libros**
+
+```
+SELECT title, price FROM books LIMIT 10;
+```
+
+**para consultar n limite de 10 ordenando precio de menor a mayor**
+
+```
+SELECT title, price FROM books ORDER BY price LIMIT 10;
+
+```
+
+**promedio de los precios**
+
+con la sentencia **AVG** que refiere a average (promedio)
+
+```
+mysql> SELECT AVG(price)
+    -> FROM books;
++------------+
+| AVG(price) |
++------------+
+|  17.304264 |
++------------+
+1 row in set (0.04 sec)
+
+```
+
+**promedio de los precios + desviacion estandar**
+
+con la sentencia **STDDEV** es una funcion que trae la desviacion estandar
+
+```
+mysql> SELECT AVG(price) AS prom, STDDEV(price) AS std 
+FROM books;
+
++-----------+-------------------+
+| prom      | std               |
++-----------+-------------------+
+| 17.304264 | 5.607365632036196 |
++-----------+-------------------+
+1 row in set (0.01 sec)
+
+```
+
+**promedio de precios + desviacion estandar por paises**
+
+Aqui se combina un poco de todo lo que se ha visto hasta el momento
+
+```
+mysql> SELECT nationality, AVG(price) AS prom,
+    -> STDDEV(price) AS std
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> WHERE nationality IS NOT NULL
+    -> GROUP BY nationality
+    -> ORDER BY prom DESC;
++-------------+-----------+--------------------+
+| nationality | prom      | std                |
++-------------+-----------+--------------------+
+| ENG         | 19.316875 |  5.822852306591247 |
+| RUS         | 17.065556 |  4.747806771110475 |
+| IND         | 16.923750 |  4.226635593175736 |
+| FRA         | 16.900000 |  4.931531202375181 |
+| GBR         | 16.666667 |  8.289886743630591 |
+| AUS         | 15.820000 | 0.5199999999999996 |
+| USA         | 15.727500 | 4.2106600003905434 |
+| SWE         | 15.696364 | 1.2190254880419302 |
+| ESP         | 15.200000 |                  0 |
+| AUT         | 14.545000 | 1.9411530078795958 |
+| JAP         | 12.300000 |                  0 |
+| DEU         | 10.200000 |                  0 |
+| MEX         | 10.000000 |                  0 |
++-------------+-----------+--------------------+
+13 rows in set (0.01 sec)
+```
+
+5. idem, pero por nacionalidad
+
+```
+mysql> SELECT nationality,
+    -> COUNT(book_id) as books,
+    -> AVG(price) AS prom,
+    -> STDDEV(price) AS std
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> WHERE nationality IS NOT NULL
+    -> GROUP BY nationality
+    -> ORDER BY books DESC;
++-------------+-------+-----------+--------------------+
+| nationality | books | prom      | std                |
++-------------+-------+-----------+--------------------+
+| USA         |    36 | 15.727500 | 4.2106600003905434 |
+| ENG         |    16 | 19.316875 |  5.822852306591247 |
+| SWE         |    11 | 15.696364 | 1.2190254880419302 |
+| RUS         |     9 | 17.065556 |  4.747806771110475 |
+| IND         |     8 | 16.923750 |  4.226635593175736 |
+| AUT         |     4 | 14.545000 | 1.9411530078795958 |
+| GBR         |     3 | 16.666667 |  8.289886743630591 |
+| FRA         |     3 | 16.900000 |  4.931531202375181 |
+| AUS         |     2 | 15.820000 | 0.5199999999999996 |
+| MEX         |     1 | 10.000000 |                  0 |
+| JAP         |     1 | 12.300000 |                  0 |
+| ESP         |     1 | 15.200000 |                  0 |
+| DEU         |     1 | 10.200000 |                  0 |
++-------------+-------+-----------+--------------------+
+13 rows in set (0.00 sec)
+
+```
+
+6. Cuál es el precio máximo/mínimo de un libro
+
+Esta pde ser una respuesta posible 
+
+```
+mysql> SELECT MAX(price), MIN(price)
+    -> FROM books;
++------------+------------+
+| MAX(price) | MIN(price) |
++------------+------------+
+|      45.40 |       5.00 |
++------------+------------+
+1 row in set (0.01 sec)
+
+```
+
+pero no esta indicando por ejemplo cual es el maximo y minimo de cada pais
+
+```
+mysql> SELECT nationality, MAX(price), MIN(price)
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> On a.author_id = b.author_id
+    -> WHERE nationality IS NOT NULL
+    -> GROUP BY nationality
+    -> ORDER BY nationality;
++-------------+------------+------------+
+| nationality | MAX(price) | MIN(price) |
++-------------+------------+------------+
+| AUS         |      16.34 |      15.30 |
+| AUT         |      15.98 |      11.20 |
+| DEU         |      10.20 |      10.20 |
+| ENG         |      28.70 |      10.60 |
+| ESP         |      15.20 |      15.20 |
+| FRA         |      22.50 |      10.50 |
+| GBR         |      23.50 |       5.00 |
+| IND         |      23.60 |      10.50 |
+| JAP         |      12.30 |      12.30 |
+| MEX         |      10.00 |      10.00 |
+| RUS         |      26.34 |      10.99 |
+| SWE         |      18.58 |      15.00 |
+| USA         |      27.00 |      10.00 |
++-------------+------------+------------+
+13 rows in set (0.00 sec)
+
+```
+
+7. ¿Cómo quedaría el reporte de préstamos?
+
+Aqui se puede empezar a presentar informacion de distinta forma
+
+**presentacion cliente, estado del libro, titulo, nombre del autor y su nacionalidad**
+
+```
+mysql> SELECT c.name, t.type, b.title, a.name, a.nationality
+    -> FROM transactions AS t
+    -> LEFT JOIN clients AS c
+    -> ON c.client_id = t.client_id
+    -> LEFT JOIN books AS b
+    -> ON b.book_id = t.book_id
+    -> LEFT JOIN authors AS a
+    -> ON b.author_id = a.author_id;
++-----------------------+--------+-------------------------------------+--------------------+-------------+
+| name                  | type   | title                               | name               | nationality |
++-----------------------+--------+-------------------------------------+--------------------+-------------+
+| Maria Teresa Castillo | sell   | El llano en llamas                  | Juan Rulfo         | MEX         |
+| Luis Saez             | lend   | Talesof Mystery and Imagination     | Edgar Allen Poe    | USA         |
+| Jose Maria Bermudez   | sell   | Estudio en escarlata                | Arthur Conan Doyle | GBR         |
+| Rafael Galvez         | sell   | The Startup Playbook                | Sam Altman         | USA         |
+| Antonia Giron         | lend   | El llano en llamas                  | Juan Rulfo         | MEX         |
+| Antonia Giron         | return | El llano en llamas                  | Juan Rulfo         | MEX         |
+| Juana Maria Lopez     | sell   | Vol39 No. 1 Social Choice & Welfare | Various            | NULL        |
++-----------------------+--------+-------------------------------------+--------------------+-------------+
+7 rows in set (0.06 sec)
+```
+
+**presentacion cliente, estado del libro, titulo, nombre del autor y su nacionalidad concatenado**
+
+Aqui se incluye la funcion **CONCAT** que permite concatenar 2 columnas
+
+```
+mysql> SELECT c.name, t.type, b.title,
+    -> CONCAT(a.name, " (",a.nationality, ")") AS autor
+    -> FROM transactions AS t
+    -> LEFT JOIN clients AS c
+    -> ON c.client_id = t.client_id
+    -> LEFT JOIN books AS b
+    -> ON b.book_id = t.book_id
+    -> LEFT JOIN authors AS a
+    -> ON b.author_id = a.author_id;
++-----------------------+--------+-------------------------------------+--------------------------+
+| name                  | type   | title                               | autor                    |
++-----------------------+--------+-------------------------------------+--------------------------+
+| Maria Teresa Castillo | sell   | El llano en llamas                  | Juan Rulfo (MEX)         |
+| Luis Saez             | lend   | Talesof Mystery and Imagination     | Edgar Allen Poe (USA)    |
+| Jose Maria Bermudez   | sell   | Estudio en escarlata                | Arthur Conan Doyle (GBR) |
+| Rafael Galvez         | sell   | The Startup Playbook                | Sam Altman (USA)         |
+| Antonia Giron         | lend   | El llano en llamas                  | Juan Rulfo (MEX)         |
+| Antonia Giron         | return | El llano en llamas                  | Juan Rulfo (MEX)         |
+| Juana Maria Lopez     | sell   | Vol39 No. 1 Social Choice & Welfare | NULL                     |
++-----------------------+--------+-------------------------------------+--------------------------+
+7 rows in set (0.00 sec)
+
+```
+
+Existe una funcion llamada **TO_DAYS()** la cual recibe como parametro un **TIMESTAMP** o **DATE TIME** o incluso una fecha a secas, esta funcion retorna el numero de dias quehan pasado entre el 1 de enero del año 0 de nuestra epoca hasta el dia de hoy
+
+```
+mysql> SELECT TO_DAYS(NOW());
++----------------+
+| TO_DAYS(NOW()) |
++----------------+
+|         738041 |
++----------------+
+1 row in set (0.07 sec)
+
+```
+la funcion **NOW** indica la fecha de hoy, entonces quiere decir que entre el 1 de enero del año 0 al dia de hoy 8 de septiembre de 2020 han pasado 738041 dias.
+
+La funcion **TO_DAYS()** es util para hallar el numero de dias que han pasado en algun momento hasta el actual o hacer un recuento de dias segun se indique en la funcion
+
+**saber jhace cuanto se compro, rento, o devolvio un libro**
+
+pero en este caso va a marcar 1 dia porque el dia de ayer fue insertada la informacion a las tablas
+
+```
+mysql> SELECT c.name, t.type, b.title,
+    -> CONCAT(a.name, " (",a.nationality, ")") AS autor,
+    -> TO_DAYS(NOW()) - TO_DAYS(t.created_at) AS ago
+    -> FROM transactions AS t
+    -> LEFT JOIN clients AS c
+    -> ON c.client_id = t.client_id
+    -> LEFT JOIN books AS b
+    -> ON b.book_id = t.book_id
+    -> LEFT JOIN authors AS a
+    -> ON b.author_id = a.author_id;
++-----------------------+--------+-------------------------------------+--------------------------+------+
+| name                  | type   | title                               | autor                    | ago  |
++-----------------------+--------+-------------------------------------+--------------------------+------+
+| Maria Teresa Castillo | sell   | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Luis Saez             | lend   | Talesof Mystery and Imagination     | Edgar Allen Poe (USA)    |    1 |
+| Jose Maria Bermudez   | sell   | Estudio en escarlata                | Arthur Conan Doyle (GBR) |    1 |
+| Rafael Galvez         | sell   | The Startup Playbook                | Sam Altman (USA)         |    1 |
+| Antonia Giron         | lend   | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Antonia Giron         | return | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Juana Maria Lopez     | sell   | Vol39 No. 1 Social Choice & Welfare | NULL                     |    1 |
++-----------------------+--------+-------------------------------------+--------------------------+------+
+7 rows in set (0.01 sec)
+```
+
+A continuacion se va a insertar una transaccion para ver el ejemplo de una forma mas clara
+
+```
+mysql> desc transactions;
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field          | Type                         | Null | Key | Default           | Extra                                         |
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+| transaction_id | int unsigned                 | NO   | PRI | NULL              | auto_increment                                |
+| book_id        | int unsigned                 | NO   |     | NULL              |                                               |
+| client_id      | int unsigned                 | NO   |     | NULL              |                                               |
+| type           | enum('sell','lend','return') | NO   |     | NULL              |                                               |
+| created_at     | timestamp                    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| modified_at    | timestamp                    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+| finished       | tinyint(1)                   | NO   |     | 0                 |                                               |
++----------------+------------------------------+------+-----+-------------------+-----------------------------------------------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO transactions(book_id, client_id, type, created_at)
+    -> VALUES(6, 76, 'sell', '2016-08-09');
+Query OK, 1 row affected (0.12 sec)
+```
+
+nuevamente se consulta la informacion ingresada 
+
+```
+mysql> select * from transactions;
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+| transaction_id | book_id | client_id | type   | created_at          | modified_at         | finished |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+|              1 |      12 |        34 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              2 |      54 |        87 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        0 |
+|              3 |       3 |        14 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              4 |       1 |        54 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              5 |      12 |        81 | lend   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              6 |      12 |        81 | return | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              7 |      87 |        29 | sell   | 2020-09-07 14:05:09 | 2020-09-07 14:05:09 |        1 |
+|              8 |       6 |        76 | sell   | 2016-09-08 00:00:00 | 2020-09-08 09:43:35 |        0 |
++----------------+---------+-----------+--------+---------------------+---------------------+----------+
+8 rows in set (0.00 sec)
+
+```
+se inserta el query nuevamente para consultar cuantos dias han pasado
+
+```
+mysql> SELECT c.name, t.type, b.title,
+    -> CONCAT(a.name, " (",a.nationality, ")") AS autor,
+    -> TO_DAYS(NOW()) - TO_DAYS(t.created_at) AS ago
+    -> FROM transactions AS t
+    -> LEFT JOIN clients AS c
+    -> ON c.client_id = t.client_id
+    -> LEFT JOIN books AS b
+    -> ON b.book_id = t.book_id
+    -> LEFT JOIN authors AS a
+    -> ON b.author_id = a.author_id;
++-----------------------+--------+-------------------------------------+--------------------------+------+
+| name                  | type   | title                               | autor                    | ago  |
++-----------------------+--------+-------------------------------------+--------------------------+------+
+| Maria Teresa Castillo | sell   | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Luis Saez             | lend   | Talesof Mystery and Imagination     | Edgar Allen Poe (USA)    |    1 |
+| Jose Maria Bermudez   | sell   | Estudio en escarlata                | Arthur Conan Doyle (GBR) |    1 |
+| Rafael Galvez         | sell   | The Startup Playbook                | Sam Altman (USA)         |    1 |
+| Antonia Giron         | lend   | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Antonia Giron         | return | El llano en llamas                  | Juan Rulfo (MEX)         |    1 |
+| Juana Maria Lopez     | sell   | Vol39 No. 1 Social Choice & Welfare | NULL                     |    1 |
+| Maria Pilar Martin    | sell   | Wallander: La leona blanca          | Henning Mankel (SWE)     | 1461 |
++-----------------------+--------+-------------------------------------+--------------------------+------+
+8 rows in set (0.00 sec)
+
+```
+
+## Clase 19 Comandos UPDATE Y DELETE
