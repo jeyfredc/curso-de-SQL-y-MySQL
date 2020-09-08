@@ -352,3 +352,42 @@ FROM clients
 WHERE client_id IN (44, 39, 66, 49)
 OR `name`
 LIKE '%Lopez%';
+
+SELECT COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`
+FROM books;
+
+SELECT COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+SUM(iF(year < 1950, 0, 1)) AS `>1950`
+FROM books;
+
+SELECT COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+SUM(iF(year < 1950, 0, 1)) AS `>1950`
+FROM books;
+
+
+SELECT COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`
+FROM books;
+
+SELECT COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`,
+SUM(IF(year>= 2000, 1, 0)) AS `>2000`
+FROM books;
+
+SELECT nationality, COUNT(book_id),
+SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`,
+SUM(IF(year>= 2000, 1, 0)) AS `>2000`
+FROM books AS b
+JOIN authors AS a
+ON a.author_id = b.author_id
+WHERE a.nationality IS NOT NULL
+GROUP BY nationality;

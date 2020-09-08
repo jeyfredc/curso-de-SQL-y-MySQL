@@ -40,20 +40,11 @@
 
 [Clase 19 Comandos UPDATE Y DELETE](#Clase-19-Comandos-UPDATE-Y-DELETE)
 
-[]()
+[Clase 20 Super Querys](#Clase-20-Super-Querys)
 
 []()
 
 []()
-
-[]()
-
-[]()
-
-[]()
-
-[]()
-
 
 ## Clase 1 Bienvenida al curso
 
@@ -4119,3 +4110,179 @@ mysql> desc transactions;
 7 rows in set (0.01 sec)
 
  ```
+
+ ## Clase 20 Super Querys
+
+ En esta clase lo que se ve es como de un dato se puede operar y sacar informacion util que puede servir para otro tipo de preguntas ademas de los de los casos de negocio
+
+ por ejemplo saber cuantos libros hay en existencia
+
+ ```
+mysql> SELECT COUNT(book_id) FROM books;
++----------------+
+| COUNT(book_id) |
++----------------+
+|            197 |
++----------------+
+1 row in set (0.08 sec)
+
+ ```
+
+lo que hace **COUNT** es sumar 1 por 1 teniendo en cuenta que en este query no hay algun tipo de requisito por tanto va a traer el numero total de libros que existen en base y da lo mismo usar la siguiente sentencia donde se indica que sume 1 por 1
+
+```
+mysql> SELECT COUNT(book_id), SUM(1) FROM books;
++----------------+--------+
+| COUNT(book_id) | SUM(1) |
++----------------+--------+
+|            197 |    197 |
++----------------+--------+
+1 row in set (0.03 sec)
+
+```
+
+tambien puedo pedir el precio de todos los libros que estan por vender 
+
+```
+mysql> SELECT SUM(price) FROM books WHERE sellable = 1;
++------------+
+| SUM(price) |
++------------+
+|    3398.94 |
++------------+
+1 row in set (0.00 sec)
+
+```
+
+incluso puedo pedir el precio de todos los libros que estan por vender con sus copias
+
+```
+mysql> SELECT SUM(price*copies) FROM books WHERE sellable = 1;
++-------------------+
+| SUM(price*copies) |
++-------------------+
+|          13525.76 |
++-------------------+
+1 row in set (0.02 sec)
+
+```
+pedir si existe algun libro que no se pueda vender junto con los que si 
+
+```
+mysql> SELECT sellable, SUM(price*copies) FROM books GROUP BY sellable;
++----------+-------------------+
+| sellable | SUM(price*copies) |
++----------+-------------------+
+|        1 |          13525.76 |
+|        0 |             10.00 |
++----------+-------------------+
+2 rows in set (0.02 sec)
+
+```
+
+en Mysql se pueden usar condiciones como **IF** para buscar de manera mas inteligente y versatil en los casos de negocio
+
+estos se usan de la siguiente forma
+
+```
+SELECT COUNT(book_id), 
+SUM(IF(cond, 1, false))
+```
+en este caso ver cuantos libros hay inferiores al año 1950
+
+```
+mysql> SELECT COUNT(book_id),
+    -> SUM(IF(year < 1950, 1, 0)) AS `<1950`
+    -> FROM books;
++----------------+-------+
+| COUNT(book_id) | <1950 |
++----------------+-------+
+|            197 |   186 |
++----------------+-------+
+1 row in set (0.00 sec)
+
+```
+
+obtener libros inferiores y posteriores a 1950
+
+```
+mysql> SELECT COUNT(book_id),
+    -> SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+    -> SUM(iF(year < 1950, 0, 1)) AS `>1950`
+    -> FROM books;
++----------------+-------+-------+
+| COUNT(book_id) | <1950 | >1950 |
++----------------+-------+-------+
+|            197 |   186 |    11 |
++----------------+-------+-------+
+1 row in set (1.17 sec)
+
+````
+
+obtener libros inferiores a 1950, entre 1950 y 1990, entre 1990 y 2000
+
+``` 
+mysql> SELECT COUNT(book_id),
+    -> SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+    -> SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+    -> SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`
+    -> FROM books;
++----------------+-------+-------+-------+
+| COUNT(book_id) | <1950 | <1990 | <2000 |
++----------------+-------+-------+-------+
+|            197 |   186 |     1 |     8 |
++----------------+-------+-------+-------+
+1 row in set (0.00 sec)
+
+```
+
+falta completar los superiores al año 2000
+
+```
+mysql> SELECT COUNT(book_id),
+    -> SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+    -> SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+    -> SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`,
+    -> SUM(IF(year>= 2000, 1, 0)) AS `>2000`
+    -> FROM books;
++----------------+-------+-------+-------+-------+
+| COUNT(book_id) | <1950 | <1990 | <2000 | >2000 |
++----------------+-------+-------+-------+-------+
+|            197 |   186 |     1 |     8 |     2 |
++----------------+-------+-------+-------+-------+
+1 row in set (0.02 sec)
+
+```
+Ahora obtener de que pais por año
+
+```
+mysql> SELECT nationality, COUNT(book_id),
+    -> SUM(IF(year < 1950, 1, 0)) AS `<1950`,
+    -> SUM(iF(year >= 1950 AND year < 1990, 1, 0)) AS `<1990`,
+    -> SUM(IF(year >= 1990 AND year < 2000, 1, 0)) AS `<2000`,
+    -> SUM(IF(year>= 2000, 1, 0)) AS `>2000`
+    -> FROM books AS b
+    -> JOIN authors AS a
+    -> ON a.author_id = b.author_id
+    -> WHERE a.nationality IS NOT NULL
+    -> GROUP BY nationality;
++-------------+----------------+-------+-------+-------+-------+
+| nationality | COUNT(book_id) | <1950 | <1990 | <2000 | >2000 |
++-------------+----------------+-------+-------+-------+-------+
+| USA         |             36 |    34 |     0 |     0 |     2 |
+| GBR         |              3 |     3 |     0 |     0 |     0 |
+| SWE         |             11 |     3 |     0 |     8 |     0 |
+| MEX         |              1 |     0 |     1 |     0 |     0 |
+| RUS         |              9 |     9 |     0 |     0 |     0 |
+| IND         |              8 |     8 |     0 |     0 |     0 |
+| JAP         |              1 |     1 |     0 |     0 |     0 |
+| ESP         |              1 |     1 |     0 |     0 |     0 |
+| FRA         |              3 |     3 |     0 |     0 |     0 |
+| AUT         |              4 |     4 |     0 |     0 |     0 |
+| ENG         |             16 |    16 |     0 |     0 |     0 |
+| DEU         |              1 |     1 |     0 |     0 |     0 |
+| AUS         |              2 |     2 |     0 |     0 |     0 |
++-------------+----------------+-------+-------+-------+-------+
+13 rows in set (0.17 sec)
+
+```
