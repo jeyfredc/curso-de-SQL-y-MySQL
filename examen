@@ -1,0 +1,83 @@
+¿Cuál de los siguientes es una consulta o query bien formado? (asumamos que existe una tabla llamada books con al menos una columna llamada book_id ) SELECT * FROM books WHERE book_id = 4;
+
+La sentencia que evita que se dupliquen datos y/o se violen reglas de unicidad en MySQL es: ON DUPLICATE KEY UPDATE volumna_1 = valor_1;
+
+La función TO_DAYS(fecha) regresa, el número de días desde: enero 1 0000
+
+El comando para conocer la estructura de una tabla es: DESCRIBE tabla
+
+Según lo visto en el curso, ¿cuál de los siguientes formatos es correcto (por convención) para nombrar una tabla? records
+
+MySQL es una base de datos tipo: Relacional
+
+¿Cuál de los siguientes tipos de datos no es un dato numérico? VARCHAR
+
+¿Qué carácter denota el final de una sentencia de SQL en MySQL? (;)
+
+El campo identificador de cualquier tabla, debe ser (con respecto a lo visto en el curso): INTEGER PRIMARY KEY AUTO_INCREMENT
+
+El operador para cruzar dos o más tablas en MySQL es: JOIN
+
+En una tabla que almacene los datos personales de nuestros clientes, la restricción de UNIQUE es muy útil en una columna que almacene: PassWords
+
+El comando para modificar la estructura de una tabla es: ALTER
+
+Al diseñar todas las tablas de una base de datos relacional, una de las grandes ventajas mencionadas en el curso es: La normalizacion de los datos
+
+Asumiendo un query que está bien escrito y que las dos tablas en cuestión no son vacías, ¿cuál es el principal problema cuando se omite el campo de unión entre dos tablas tras cualquier JOIN? MySQL mara error
+
+El tipo de tablas MYSIAM es mejor para: Tablas de tipo catalogo
+
+¿Cuál de los siguientes comandos se usa para listar las bases de datos existentes en la instalación de MySQL? SHOW DATABASES
+
+Asumiendo que existen las tablas books y authors con sus respectivas columnas de identificación, cuál de las siguientes sentencias es correcta a continuación de […] FROM books AS b JOIN authors AS a: ON a.book_id = n.book_id [...]
+
+Si queremos que un campo no se pueda repetir en toda la tabla, usamos: UNIQUE
+
+Si quiero almacenar una fecha/hora sin restricciones de año, debo usar: DATETIME
+
+Una estrategia útil para almacenar imágenes generadas/usadas por nuestra aplicación en la base de datos es: Almacerar las urls de las imagenes almacenadas como archivos externos
+
+El formato correcto para agregar una tupla a alguna tabla, es: INSERT INTOP tabla(columna_1, columna_2) VALUES(valor_1, valor_2);
+
+¿Cuál de los siguientes comandos sirve para movernos a una base de datos específica? (supongamos que la base de datos se llama “library”): USE library;
+
+Una vez que estamos dentro de la base de datos “library”, ¿cuál de los siguientes comandos sirve para listar todas las tablas que contengan la cadena de caracteres “books” en su nombre? SHOW tables LIKE '%books%';
+
+Selecciona la única opción correcta para completar el enunciado: el commando UPDATE, por definición permite: Modificar muchas tuplas al mismo tiempo
+
+Asumiendo que:
+a) […] FROM books JOIN authors […] y
+b) […] FROM books, authors […]
+son sentencias equivalentes, a la segunda se le conoce comúnmente como JOIN implicito
+
+En MySQL, con una base de datos diseñada con respecto a la convenciones normales (vistas en el curso), las tablas se relacionan unas con otras a través de: Una columna de identificador
+
+Según lo visto en clase, lo más importante antes de crear nuestra aplicación (con base de datos), es: Diseñar la base de datos
+
+El caracter para denotar “todas las columnas” en una sentencia SELECT es: (*)
+
+¿Qué columna nunca debe faltar en una tabla de una base de datos relacional? Un identificador unico
+
+El operador para traer sólo X número de tuplas tras hacer un query es: LIMIT x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

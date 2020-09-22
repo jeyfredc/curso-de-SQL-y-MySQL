@@ -4418,3 +4418,11 @@ En esta clase el profesor Alberto Alcocer nos muestra cómo navegar dentro de un
 MySQL es un sistema de gestión de bases de datos relacionales, de código abierto y basado en el lenguaje SQL. Cuenta con una gran cantidad de aplicaciones como el desarrollo web o Big Data.
 
 ver video https://youtu.be/raSv24T4cjM
+
+___
+
+## ¿Quieres conocer mas proyectos?
+
+Puedes visualizar mi portafolio en el siguiente enlace https://jeyfredc.github.io/Portafolio/Css-Portafolio/
+
+![assets/img-portafolio.png](assets/img-portafolio.png)
