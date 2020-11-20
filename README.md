@@ -1,6 +1,6 @@
 # Curso de SQL y MsQL realizado en Platzi
 
-**Contenido**
+## Tabla de contenido
 
 [Clase 1 Bienvenida al curso](#Clase-1-Bienvenida-al-curso)
 
@@ -50,6 +50,10 @@
 
 El curso se basara sobre un proyecto directamente con la base de datos, se tratara de una librería donde se pueda comprar o rentar un libro y se ira creando paso a paso, es importante investigar con la documentación que ofrecen los programas SQL y MySQL. No es un proyecto de programación y se va a realizar el curso desde la consola
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 2 Instalación de MySQL
 
 Para realizar la instalación de MySQL en tu pc lo primero que debes tener en cuenta es que debes hacer la verificación de la versión que quieres instalar y la distribución para tu sistema operativo. En este enlace encuentras el listado de las plataformas soportadas. https://www.mysql.com/support/supportedplatforms/database.html
@@ -93,6 +97,10 @@ En este punto ya tienes instalado tu servidor de MySQL y puedes continuar con el
 Seguir instrucciones del repositorio
 
 https://www.digitalocean.com/community/tutorials/como-instalar-mysql-en-ubuntu-18-04-es#:~:text=y
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 3 La Consola de MySQL
 
@@ -209,11 +217,19 @@ y ya para salir de mysql con la sentencia
 mysql>exit;
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 4 ¿Qué es una base de datos?
 
 Existen de diferentes sabores, colores, pero una base de datos es un lugar donde se pueden almacenar datos puntuales de cualquier cantidad de cosas, para después operar sobre esos datos y convertirlos en información y estos a su vez convertilos en operaciones de negocios, en crecimiento, dinero, sabiduría, etc..., antes que todo lo anterior en el diseño de un modelo relacional que es crear tablas donde algunas pueden depender entre si, no necesariamente entre todas. Lo importante es saber que se pueden crear relaciones por ejemplo como las de un libro, un libro puede contener diferentes autores o viceversa un autor puede contener muchos libros.
 
 Una base de datos permite almacenar datos y relaciones que se pueden convertir en información. 
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 5 Comando CREATE
 
@@ -231,6 +247,9 @@ Es una tabla directa, sencilla y rapida. Las operaciones y transacciones son 1 a
 
 Esto afecta la estrategia, existen 2 tipos de tablas o arquitectura que se van a usar que es una **tabla de catalogo** y una **tabla de operacion**, la diferencia es que la tabla de catalogo crecerá en un orden lento por tal razón se utilizara **InnoDb**, las tablas que crecen y se utilizan mucho acceso al disco duro sera en **MyISAM** para darle mayor agilidad al sistema
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 6 Tipos de columnas / Creación de la tabla books
 
@@ -380,6 +399,9 @@ CREATE TABLE IF NOT EXISTS books (
 
 - Por ultimo viene la descripción **description TEXT** donde el tipo de dato es **TEXT** y este puede almacenar cualquier cantidad de caracteres
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 7 Tipos de columnas / Creación de la tabla authors
 
@@ -566,6 +588,10 @@ CREATE TABLE IF NOT EXISTS authors(
 
  lo que se puede hacer es borrar la tabla hacer la correccion en estos valores y nuevamente crearlas repitiendo los pasos
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
  ## Clase 8 Tipos de columnas usando / Creación de la tabla clientes
 
 Se crea la tabla para los clientes con la siguiente estructura la cual se van a explicar algunas cosas que tienen distintas de las anteriores
@@ -616,6 +642,10 @@ CREATE TABLE IF NOT EXISTS operations(
     finished TINYINT(1) NOT NULL -- esta ultima se coloca en caso que el libro este vendido
 );
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 9 Comando INSERT
 
@@ -737,6 +767,10 @@ mysql> select * from authors;
     
     ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 10 Comando on duplicate key
 
 En esta clase se realiza la creacion de la tabla de clientes, con las siguientes sentencias:
@@ -846,6 +880,10 @@ mysql>
 
 y como se observa **maria Dolores** queda inactiva en la tabla
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 11 Inserción de datos usando queries anidados
 
 En esta clase se van a insertar 2 libros con el mismo autor, el cual sera **Octavio Paz**, el cual le corresponde el id es el **numero 6**. 
@@ -932,6 +970,10 @@ mysql> select * from books;
 2 rows in set (0.00 sec)
 
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 12 Bash y archivos SQL
 
@@ -1045,6 +1087,10 @@ mysql> select * from clients;
 ```
 mysql> select * from transactions;
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 13 Su majestad el SELECT
 
@@ -1940,6 +1986,10 @@ mysql> SELECT name, email, YEAR(NOW()) - YEAR(birthdate) AS edad_actual, gender
 
 y de esta forma se empiezan a realizar consultas en bases de datos con pequeñas sentencias
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 14 Comando JOIN
 
 para trabajar con JOIN se va a realizar un cruce de informacion ademas de visualizar algunas cosas que no se han visto
@@ -2261,6 +2311,10 @@ mysql> SELECT c.name AS client, b.title , a.name AS author, t.type
 +---------------------+----------------------------------+--------------------+------+
 3 rows in set (0.00 sec)
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 15 Left JOIN
 
@@ -2679,6 +2733,10 @@ mysql> SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
 
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 16 Tipos de JOIN
 
 En la clase anterior estuvimos hablando de dos tipos de joins que podemos usar cuando estemos trabajando con consultas a nuestras bases de datos.
@@ -2799,6 +2857,10 @@ FULL OUTER JOIN Table_B B
 ON A.Key = B.Key
 WHERE A.Key IS NULL OR B.Key IS NULL
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 17 5 casos de negocio
 
@@ -3217,6 +3279,10 @@ mysql> SELECT nationality, COUNT(author_id) AS c_authors
 2 rows in set (0.01 sec)
 
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Clase 18 Continuación de casos de negocio
 
@@ -3774,6 +3840,10 @@ mysql> SELECT c.name, t.type, b.title,
 
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 19 Comandos UPDATE Y DELETE
 
 los comandos **UPDATE** y **DELETE** sirven para modificar, actualizar o borrar datos, en este ejemplo se va a dejar todas las sentencias que habrian que ejecutarse para borrar un autor de la base de datos.
@@ -4111,6 +4181,10 @@ mysql> desc transactions;
 
  ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
  ## Clase 20 Super Querys
 
  En esta clase lo que se ve es como de un dato se puede operar y sacar informacion util que puede servir para otro tipo de preguntas ademas de los de los casos de negocio
@@ -4287,6 +4361,10 @@ mysql> SELECT nationality, COUNT(book_id),
 
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 21 Comando mysqldump
 
 Es recomendable usar siempre la documentacion para hacer algun cambio en una base de datos o si se tiene el desconocimiento de algo.
@@ -4411,6 +4489,10 @@ mysqldump -u root -p -d pruebaplatzi > esquema.sql
 ```
 Despues de ejecutar esta sentencia en la terminal verificar la carpeta donde se exporto
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clase 22 Bases de datos para Big Data
 
 En esta clase el profesor Alberto Alcocer nos muestra cómo navegar dentro de una consola de MySQL desde 0, cómo crear tablas y proyectar su diseño para que sean útiles y fácilmente explotables con grandes cantidades de información.
@@ -4419,10 +4501,14 @@ MySQL es un sistema de gestión de bases de datos relacionales, de código abier
 
 ver video https://youtu.be/raSv24T4cjM
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ___
 
 ## ¿Quieres conocer mas proyectos?
 
-Puedes visualizar mi portafolio en el siguiente enlace https://jeyfredc.github.io/Portafolio/Css-Portafolio/
+Puedes visualizar mi portafolio en el siguiente enlace https://jeyfredc.github.io/Portafolio/
 
 ![assets/img-portafolio.png](assets/img-portafolio.png)
